@@ -1,0 +1,9 @@
+- import/export input cannot be null
+- edit/delete 
+- tambahin Rp.
+- pdf kepotong, solui ganti lanscape . tambahin total value
+- add filter tanggal awal/akhir 
+- default tanggal bulan sekarangg
+- filter invoice tanggal & from to
+- value idr = qty * value
+
