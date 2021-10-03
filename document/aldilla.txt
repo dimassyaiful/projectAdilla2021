@@ -11,3 +11,4 @@
 BUGS :
 - ubah type untuk kolom value, valueidr menjadi decimal (13,3)
   karena ketika diinput menjadi tidak sesuai
+- Data temporary table tidak hilang ketika di refresh, mengakibatkan data ambigu

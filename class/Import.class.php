@@ -68,6 +68,14 @@ class Import
         return $datas;
     }
 
+    public function refreshImportTemp()
+    {
+        $this->sql = "delete from `tbl_importtemp`";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        return true;
+    }
+
     public function saveDataImport($data)
     {
         try {

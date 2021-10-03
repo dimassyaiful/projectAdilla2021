@@ -26,5 +26,12 @@ if (isset($_POST)) {
         } else {
             echo var_dump($status);
         }
+    } elseif ($_POST['type'] == 'refreshTempImport') {
+        $status = $Import->refreshImportTemp();
+        if ($status) {
+            echo "successRefresh";
+        } else {
+            echo var_dump($status);
+        }
     }
 }

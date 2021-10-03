@@ -247,7 +247,19 @@ endforeach;
             saveImport();
         });
 
-        console.clear();
+        //clear temporary table when refresh page
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../process/import.process.php",
+            data: {
+                type: 'refreshTempImport',
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+
     });
 
     function modalAdd() {
@@ -345,9 +357,9 @@ endforeach;
             let value = tmp_qty.value.replace(/[.]/gi, '');
             let formatValue = formatter.format(value).replace(/[IDR]/gi, '').replace(/(\.+\d{2})/, '').trimLeft();
             let showValue = formatValue.replace(/[,]/gi, '.');
-            if(isNaN(showValue)){
-                showValue=0;
-            }
+            // if(isNaN(showValue)){
+            //     showValue=0;
+            // }
             $("#qty").val(value);
             $("#qty_tmp").val(showValue);
             hitungValueInIdr();
