@@ -190,7 +190,42 @@ endforeach;
         $("#example").DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    title: function () { return "Data Export"; },
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }
+                },
+                {
+                    extend: 'print',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    title: function () { return "Data Export"; },
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }
+                }
             ]
         });
 

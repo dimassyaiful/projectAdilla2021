@@ -51,28 +51,28 @@ $datas = $report->getData();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($datas as $data) :
-                                    ?>
+foreach ($datas as $data):
+?>
                                         <tr>
-                                            <td><?= $data->idInvoices; ?></td>
-                                            <td><?= $data->dateOfPib; ?></td>
-                                            <td><?= $data->docNo; ?></td>
-                                            <td><?= $data->docType; ?></td>
-                                            <td><?= $data->noPengajuanDokumen; ?></td>
-                                            <td><?= $data->blNo; ?></td>
-                                            <td><?= $data->vesselName; ?></td>
-                                            <td><?= $data->shipper; ?></td>
-                                            <td><?= $data->remark; ?></td>
-                                            <td><?= $data->qty; ?></td>
-                                            <td><?= $data->valuta; ?></td>
-                                            <td><?= $data->value; ?></td>
-                                            <td><?= $data->valueIdr; ?></td>
-                                            <td><?= ucfirst($data->type); ?></td>
+                                            <td><?=$data->idInvoices;?></td>
+                                            <td><?=$data->dateOfPib;?></td>
+                                            <td><?=$data->docNo;?></td>
+                                            <td><?=$data->docType;?></td>
+                                            <td><?=$data->noPengajuanDokumen;?></td>
+                                            <td><?=$data->blNo;?></td>
+                                            <td><?=$data->vesselName;?></td>
+                                            <td><?=$data->shipper;?></td>
+                                            <td><?=$data->remark;?></td>
+                                            <td><?=$data->qty;?></td>
+                                            <td><?=$data->valuta;?></td>
+                                            <td><?=$data->value;?></td>
+                                            <td><?=$data->valueIdr;?></td>
+                                            <td><?=ucfirst($data->type);?></td>
                                         </tr>
                                     <?php
 
-                                    endforeach;
-                                    ?>
+endforeach;
+?>
                                 </tbody>
                             </table>
                         </div>
@@ -82,13 +82,48 @@ $datas = $report->getData();
         </div>
     </div>
 </section>
-<?php include 'footer.php' ?>
+<?php include 'footer.php'?>
 <script>
     $(document).ready(function() {
         $("#example").DataTable({
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'copy',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                    }
+                },
+                {
+                    extend: 'csv',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                    }
+                },
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    title: function () { return "Report"; },
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                    }
+                },
+                {
+                    extend: 'print',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    title: function () { return "Report Import & Export"; },
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                    }
+                }
             ]
         });
     });
