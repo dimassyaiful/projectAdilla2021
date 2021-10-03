@@ -2,7 +2,7 @@
     <table id="tableImportTemp" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th>Date of Pib</th>
+                <th>Date of Peb</th>
                 <th>Doc No.</th>
                 <th>Doc Type</th>
                 <th>No. Pengajuan Dokumen</th>

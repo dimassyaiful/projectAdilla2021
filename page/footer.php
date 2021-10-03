@@ -39,8 +39,13 @@
 <script src="../plugins/datatableexport/vfs_fonts.js"></script>
 <script src="../plugins/datatableexport/buttons.html5.min.js"></script>
 <script src="../plugins/datatableexport/buttons.print.min.js"></script>
+
+
+
+
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.js"></script>
+
 </body>
 
 </html>

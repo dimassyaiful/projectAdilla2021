@@ -49,20 +49,20 @@ $datas = $invoices->getDataInvoice();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($datas as $data) :
-                                    ?>
+foreach ($datas as $data):
+?>
                                         <tr>
-                                            <td><a class="btn btn-primary" style="cursor: pointer;" onclick="detailData('<?= $data->id; ?>','<?= $data->type; ?>')">
-                                                    <?= $data->id; ?></a>
+                                            <td><a class="btn btn-primary" style="cursor: pointer;" onclick="detailData('<?=$data->id;?>','<?=$data->type;?>')">
+                                                    <?=$data->id;?></a>
                                             </td>
-                                            <td><?= $data->date; ?></td>
-                                            <td><?= $data->fromto; ?></td>
-                                            <td><?= $data->type; ?></td>
-                                            <td><a href="../process/print-invoices.php?id=<?= $data->id; ?>" class="btn btn-warning">Print</a></td>
+                                            <td><?=$data->date;?></td>
+                                            <td><?=$data->fromto;?></td>
+                                            <td><?=$data->type;?></td>
+                                            <td><a href="../process/print-invoices.php?id=<?=$data->id;?>" class="btn btn-warning">Print</a></td>
                                         </tr>
                                     <?php
-                                    endforeach;
-                                    ?>
+endforeach;
+?>
                                 </tbody>
                             </table>
                         </div>
@@ -91,24 +91,27 @@ $datas = $invoices->getDataInvoice();
                                 <div class="card-title">Data Invoice</div>
                             </div>
                             <div class="card-body">
+                                <form id="formx">
                                 <div class="form-group">
-                                    <label for="type">Type</label>
-                                    <select name="type" id="type" class="form-control">
+                                    <label class="labelRequired" for="type">Type</label>
+                                    <select required name="type" id="type" class="form-control">
                                         <option value="Import">Import</option>
                                         <option value="Export">Export</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="fromto">From/To</label>
-                                    <input type="text" name="fromto" id="fromto" class="form-control">
+                                    <label class="labelRequired" for="fromto">From/To</label>
+                                    <input required  type="text" name="fromto" id="fromto" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label for="date">date</label>
-                                    <input type="date" name="date" id="date" class="form-control">
+                                    <label class="labelRequired" for="date">date</label>
+                                    <input required  type="date" name="date" id="date" class="form-control">
                                 </div>
                                 <center>
-                                    <a href="#" id="btnAddInvoice" class="btn btn-primary" onclick="AddInvoice()">Add</a>
+                                    <button type="submit" class="btn btn-primary" > Add </button>
+                                    <!-- <a href="#" id="btnAddInvoice" class="btn btn-primary" onclick="AddInvoice()">Add</a> -->
                                 </center>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -151,10 +154,15 @@ $datas = $invoices->getDataInvoice();
 
 <!-- End modal Detail  -->
 
-<?php include 'footer.php' ?>
+<?php include 'footer.php'?>
 <script>
     $(document).ready(function() {
         $("#example").DataTable();
+
+        $("#formx").on('submit', function(e){
+            e.preventDefault();
+            AddInvoice();
+        });
     });
 
     function detailData(id, type) {
@@ -300,7 +308,36 @@ $datas = $invoices->getDataInvoice();
         }
     }
 
+
+    $(document).ready(function() {
+        //Refresh Temporary table
+        $.ajax({
+                type: "POST",
+                dataType: "html",
+                url: "../process/export.process.php",
+                data: {
+                    type: 'refreshTempExport',
+                },
+                error: function(err) {
+                    console.log(err)
+                }
+            });
+
+            //clear temporary table when refresh page
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../process/import.process.php",
+            data: {
+                type: 'refreshTempImport',
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    });
+
     $('#modalAdd').on('hidden.bs.modal', function(e) {
         window.location = "view-invoice.php";
-    })
+    });
 </script>

@@ -21,10 +21,18 @@ class Export
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
-        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
             $datas[] = $result;
         endwhile;
         return $datas;
+    }
+
+    public function refreshExportTemp()
+    {
+        $this->sql = "delete from `tbl_exporttemp`";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        return true;
     }
 
     public function insertDataExprot($data)
@@ -46,7 +54,10 @@ class Export
                '" . $data['qty'] . "'
            )";
             $this->statement = $this->conn->prepare($this->sql);
-            if ($this->statement->execute()) return true;
+            if ($this->statement->execute()) {
+                return true;
+            }
+
             return false;
         } catch (PDOException $e) {
             return die($e->getMessage());
@@ -59,7 +70,7 @@ class Export
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
-        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
             $datas[] = $result;
         endwhile;
         return $datas;
@@ -91,7 +102,10 @@ class Export
                     if ($this->statement->execute()) {
                         $this->sql = "DELETE FROM tbl_exporttemp";
                         $this->statement = $this->conn->prepare($this->sql);
-                        if ($this->statement->execute()) return true;
+                        if ($this->statement->execute()) {
+                            return true;
+                        }
+
                         return false;
                     }
                     return false;
