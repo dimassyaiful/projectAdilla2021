@@ -21,7 +21,7 @@ class Import
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
-        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
             $datas[] = $result;
         endwhile;
         return $datas;
@@ -46,7 +46,10 @@ class Import
                '" . $data['qty'] . "'
            )";
             $this->statement = $this->conn->prepare($this->sql);
-            if ($this->statement->execute()) return true;
+            if ($this->statement->execute()) {
+                return true;
+            }
+
             return false;
         } catch (PDOException $e) {
             return die($e->getMessage());
@@ -59,7 +62,7 @@ class Import
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
-        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
             $datas[] = $result;
         endwhile;
         return $datas;
@@ -91,7 +94,10 @@ class Import
                     if ($this->statement->execute()) {
                         $this->sql = "DELETE FROM tbl_importtemp";
                         $this->statement = $this->conn->prepare($this->sql);
-                        if ($this->statement->execute()) return true;
+                        if ($this->statement->execute()) {
+                            return true;
+                        }
+
                         return false;
                     }
                     return false;

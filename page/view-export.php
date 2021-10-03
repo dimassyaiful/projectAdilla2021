@@ -53,28 +53,28 @@ $datas = $export->getDataExport();
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($datas as $data) :
-                                    ?>
+foreach ($datas as $data):
+?>
                                         <tr>
                                             <td>
-                                                <?= $data->idInvoices; ?>
+                                                <?=$data->idInvoices;?>
                                             </td>
-                                            <td><?= $data->dateOfPib; ?></td>
-                                            <td><?= $data->docNo; ?></td>
-                                            <td><?= $data->docType; ?></td>
-                                            <td><?= $data->noPengajuanDokumen; ?></td>
-                                            <td><?= $data->blNo; ?></td>
-                                            <td><?= $data->vesselName; ?></td>
-                                            <td><?= $data->consignee; ?></td>
-                                            <td><?= $data->remark; ?></td>
-                                            <td><?= $data->qty; ?></td>
-                                            <td><?= $data->valuta; ?></td>
-                                            <td><?= $data->value; ?></td>
-                                            <td><?= $data->valueIdr; ?></td>
+                                            <td><?=$data->dateOfPib;?></td>
+                                            <td><?=$data->docNo;?></td>
+                                            <td><?=$data->docType;?></td>
+                                            <td><?=$data->noPengajuanDokumen;?></td>
+                                            <td><?=$data->blNo;?></td>
+                                            <td><?=$data->vesselName;?></td>
+                                            <td><?=$data->consignee;?></td>
+                                            <td><?=$data->remark;?></td>
+                                            <td><?=$data->qty;?></td>
+                                            <td><?=$data->valuta;?></td>
+                                            <td><?=$data->value;?></td>
+                                            <td><?=$data->valueIdr;?></td>
                                         </tr>
                                     <?php
-                                    endforeach;
-                                    ?>
+endforeach;
+?>
                                 </tbody>
                             </table>
                         </div>
@@ -86,6 +86,7 @@ $datas = $export->getDataExport();
 </section>
 
 <!-- Modal -->
+
 <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -96,75 +97,94 @@ $datas = $export->getDataExport();
                 </button>
             </div>
             <div class="modal-body">
+                    <form method="post" id="formz">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="dateOfPib">Date of Peb</label>
-                            <input type="date" name="dateOfPib" id="dateOfPib" class="form-control">
+                            <label class="labelRequired" for="dateOfPib">Date of Peb</label>
+                            <input type="date" name="dateOfPib" id="dateOfPib" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="docNo">Doc No.</label>
-                            <input type="text" name="docNo" id="docNo" class="form-control">
+                            <label class="labelRequired" for="docNo">Doc No.</label>
+                            <input type="text" name="docNo" id="docNo" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="docType">Doc Type</label>
-                            <input type="text" name="docType" id="docType" class="form-control">
+                            <label class="labelRequired" for="docType">Doc Type</label>
+                            <input type="text" name="docType" id="docType" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="noPengajuanDokumen">No. Pengajuan Dokumen</label>
-                            <input type="text" name="noPengajuanDokumen" id="noPengajuanDokumen" class="form-control">
+                            <label class="labelRequired" for="noPengajuanDokumen">No. Pengajuan Dokumen</label>
+                            <input type="text" name="noPengajuanDokumen" id="noPengajuanDokumen" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="blNo">BL No.</label>
-                            <input type="text" name="blNo" id="blNo" class="form-control">
+                            <label class="labelRequired" for="blNo">BL No.</label>
+                            <input type="text" name="blNo" id="blNo" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="vesselName">Vessel Name</label>
-                            <input type="text" name="vesselName" id="vesselName" class="form-control">
+                            <label class="labelRequired" for="vesselName">Vessel Name</label>
+                            <input type="text" name="vesselName" id="vesselName" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="consignee">Consignee</label>
-                            <input type="text" name="consignee" id="consignee" class="form-control">
+                            <label class="labelRequired" for="consignee">Consignee</label>
+                            <input type="text" name="consignee" id="consignee" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="remark">Remark</label>
-                            <input type="text" name="remark" id="remark" class="form-control">
+                            <label class="labelRequired" for="remark">Remark</label>
+                            <input type="text" name="remark" id="remark" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="qty">Qty</label>
-                            <input type="text" name="qty" id="qty" class="form-control">
+                            <label class="labelRequired" for="qty">Qty</label>
+                            <input type="text" name="qty" id="qty" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="valuta">Valuta</label>
-                            <input type="text" name="valuta" id="valuta" class="form-control">
+                            <label class="labelRequired" for="valuta">Valuta</label>
+                            <input type="text" name="valuta" id="valuta" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="value">Value</label>
-                            <input type="text" name="value" id="value" class="form-control">
+                            <label class="labelRequired" for="value">Value</label>
+                            <input type="text" name="value" id="value" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="valueIdr">Value in IDR</label>
-                            <input type="text" name="valueIdr" id="valueIdr" class="form-control">
+                            <label class="labelRequired" for="valueIdr">Value in IDR</label>
+                            <input type="text" name="valueIdr" id="valueIdr" class="form-control" required>
                         </div>
                     </div>
+
                     <div class="col-md-12">
                         <center>
-                            <a class="btn btn-primary" onclick="addExport()">Add Export</a>
+                        <button type="submit" class="btn btn-primary" >Add Export</button>
                         </center>
                     </div>
-                    <div class="col-md-12">
+                    </div>
+                    </form>
+
+                    <div class="col-md-12 mt-2">
                         <div id="dashExport">
                         </div>
+
+                        <div class="form-group" style="display: none" id="SaveButton">
+                            <form id="formx">
+                                <div class="mb-2">
+                                    <label for="fromto">From To</label>
+                                    <input type="text" name="fromto" id="fromto" class="form-control" required>
+                                </div>
+                            <center>
+                                <button type="submit" class="btn btn-primary" >Save</button>
+                            </center>
+                            </form>
+                        </div>
                     </div>
-                </div>
+
             </div>
         </div>
     </div>
 </div>
 
-<?php include 'footer.php' ?>
+
+
+<?php include 'footer.php'?>
 <script>
     $(document).ready(function() {
         $("#example").DataTable({
@@ -172,6 +192,16 @@ $datas = $export->getDataExport();
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
+        });
+
+        $("#formz").on('submit', function(e){
+            e.preventDefault();
+            addExport();
+            $("#SaveButton").css("display","block");
+        });
+        $("#formx").on('submit', function(e){
+            e.preventDefault();
+            saveExport();
         });
     });
 

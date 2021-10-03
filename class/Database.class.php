@@ -13,7 +13,7 @@ class Database
         $this->host = "localhost";
         $this->username = "root";
         $this->password = "";
-        $this->db = "db_aldilla";
+        $this->db = "aldilla";
     }
 
     public function getConnection()

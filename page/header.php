@@ -26,6 +26,14 @@ include 'session.php';
     <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatableexport/buttons.dataTables.min.css">
+
+    <!-- Custom css -->
+    <style>
+        .labelRequired:before {
+            content: "*";
+            color:red;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -58,7 +66,7 @@ include 'session.php';
                         <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block"><?= ucfirst($_SESSION['name']); ?></a>
+                        <a href="#" class="d-block"><?=ucfirst($_SESSION['name']);?></a>
                     </div>
                 </div>
 

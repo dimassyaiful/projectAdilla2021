@@ -7,3 +7,7 @@
 - filter invoice tanggal & from to
 - value idr = qty * value
 
+
+BUGS :
+- ubah type untuk kolom value, valueidr menjadi decimal (13,3)
+  karena ketika diinput menjadi tidak sesuai

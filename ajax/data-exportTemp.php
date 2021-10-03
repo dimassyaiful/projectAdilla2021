@@ -18,32 +18,25 @@
         </thead>
         <tbody>
             <?php
-            foreach ($datas as $data) :
-            ?>
+foreach ($datas as $data):
+?>
                 <tr>
-                    <td><?= $data->dateOfPib; ?></td>
-                    <td><?= $data->docNo; ?></td>
-                    <td><?= $data->docType; ?></td>
-                    <td><?= $data->noPengajuanDokumen; ?></td>
-                    <td><?= $data->blNo; ?></td>
-                    <td><?= $data->vesselName; ?></td>
-                    <td><?= $data->consignee; ?></td>
-                    <td><?= $data->remark; ?></td>
-                    <td><?= $data->qty; ?></td>
-                    <td><?= $data->valuta; ?></td>
-                    <td><?= $data->value; ?></td>
-                    <td><?= $data->valueIdr; ?></td>
+                    <td><?=$data->dateOfPib;?></td>
+                    <td><?=$data->docNo;?></td>
+                    <td><?=$data->docType;?></td>
+                    <td><?=$data->noPengajuanDokumen;?></td>
+                    <td><?=$data->blNo;?></td>
+                    <td><?=$data->vesselName;?></td>
+                    <td><?=$data->consignee;?></td>
+                    <td><?=$data->remark;?></td>
+                    <td><?=$data->qty;?></td>
+                    <td><?=$data->valuta;?></td>
+                    <td><?=$data->value;?></td>
+                    <td><?=$data->valueIdr;?></td>
                 </tr>
             <?php
-            endforeach;
-            ?>
+endforeach;
+?>
         </tbody>
     </table>
 </div>
-<div class="form-group">
-<label for="fromto">From To</label>
-<input type="text" name="fromto" id="fromto" class="form-control">
-</div>
-<center>
-    <a class="btn btn-primary" onclick="saveExport()">Save</a>
-</center>

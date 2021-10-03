@@ -6,6 +6,7 @@ $imports = new Import();
 $datas = $imports->getDataImport();
 ?>
 <!-- Content Header (Page header) -->
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -52,32 +53,37 @@ $datas = $imports->getDataImport();
                                         <th>Valuta</th>
                                         <th>Value</th>
                                         <th>Value in IDR</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    foreach ($datas as $data) :
-                                    ?>
+foreach ($datas as $data):
+?>
                                         <tr>
                                             <td>
-                                                <?= $data->idInvoices; ?>
+                                                <?=$data->idInvoices;?>
                                             </td>
-                                            <td><?= $data->dateOfPib; ?></td>
-                                            <td><?= $data->docNo; ?></td>
-                                            <td><?= $data->docType; ?></td>
-                                            <td><?= $data->noPengajuanDokumen; ?></td>
-                                            <td><?= $data->blNo; ?></td>
-                                            <td><?= $data->vesselName; ?></td>
-                                            <td><?= $data->shipper; ?></td>
-                                            <td><?= $data->remark; ?></td>
-                                            <td><?= $data->qty; ?></td>
-                                            <td><?= $data->valuta; ?></td>
-                                            <td><?= $data->value; ?></td>
-                                            <td><?= $data->valueIdr; ?></td>
+                                            <td><?=$data->dateOfPib;?></td>
+                                            <td><?=$data->docNo;?></td>
+                                            <td><?=$data->docType;?></td>
+                                            <td><?=$data->noPengajuanDokumen;?></td>
+                                            <td><?=$data->blNo;?></td>
+                                            <td><?=$data->vesselName;?></td>
+                                            <td><?=$data->shipper;?></td>
+                                            <td><?=$data->remark;?></td>
+                                            <td><?=number_format($data->qty);?></td>
+                                            <td><?=$data->valuta;?></td>
+                                            <td><?=number_format($data->value, 2);?> </td>
+                                            <td>Rp. <?=number_format($data->valueIdr, 2);?></td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
+                                                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
+                                            </td>
                                         </tr>
                                     <?php
-                                    endforeach;
-                                    ?>
+endforeach;
+?>
                                 </tbody>
                             </table>
                         </div>
@@ -88,7 +94,7 @@ $datas = $imports->getDataImport();
     </div>
 </section>
 
-<?php include 'footer.php' ?>
+<?php include 'footer.php'?>
 
 <!-- Modal -->
 <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -101,69 +107,86 @@ $datas = $imports->getDataImport();
                 </button>
             </div>
             <div class="modal-body">
+                <form method="post" id="formz">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="dateOfPib">Date of Pib</label>
-                            <input type="date" name="dateOfPib" id="dateOfPib" class="form-control">
+                            <label class="labelRequired" for="dateOfPib">Date of Pib</label>
+                            <input type="date" name="dateOfPib" id="dateOfPib" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="docNo">Doc No.</label>
-                            <input type="text" name="docNo" id="docNo" class="form-control">
+                            <label class="labelRequired" for="docNo">Doc No.</label>
+                            <input type="text" name="docNo" id="docNo" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="docType">Doc Type</label>
-                            <input type="text" name="docType" id="docType" class="form-control">
+                            <label class="labelRequired" for="docType">Doc Type</label>
+                            <input type="text" name="docType" id="docType" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="noPengajuanDokumen">No. Pengajuan Dokumen</label>
-                            <input type="text" name="noPengajuanDokumen" id="noPengajuanDokumen" class="form-control">
+                            <label class="labelRequired" for="noPengajuanDokumen">No. Pengajuan Dokumen</label>
+                            <input type="text" name="noPengajuanDokumen" id="noPengajuanDokumen" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="blNo">BL No.</label>
-                            <input type="text" name="blNo" id="blNo" class="form-control">
+                            <label class="labelRequired" for="blNo">BL No.</label>
+                            <input type="text" name="blNo" id="blNo" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="vesselName">Vessel Name</label>
-                            <input type="text" name="vesselName" id="vesselName" class="form-control">
+                            <label class="labelRequired" for="vesselName">Vessel Name</label>
+                            <input type="text" name="vesselName" id="vesselName" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="shipper">Shipper</label>
-                            <input type="text" name="shipper" id="shipper" class="form-control">
+                            <label class="labelRequired" for="shipper">Shipper</label>
+                            <input type="text" name="shipper" id="shipper" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="remark">Remark</label>
-                            <input type="text" name="remark" id="remark" class="form-control">
+                            <label class="labelRequired" for="remark">Remark</label>
+                            <input type="text" name="remark" id="remark" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="qty">QTY</label>
-                            <input type="text" name="qty" id="qty" class="form-control">
+                            <label class="labelRequired" for="qty">QTY</label>
+                            <input maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="qty_tmp" id="qty_tmp" class="form-control" required>
+                            <input style="display:none" type="text" name="qty" id="qty" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="valuta">Valuta</label>
-                            <input type="text" name="valuta" id="valuta" class="form-control">
+                            <label class="labelRequired" for="valuta">Valuta</label>
+                            <input type="text" name="valuta" id="valuta" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="value">Value</label>
-                            <input type="text" name="value" id="value" class="form-control">
+                            <label class="labelRequired" for="value">Value</label>
+                            <input  onkeypress="return event.charCode == 44 || (event.charCode >= 48 && event.charCode <= 57)" type="text" name="value_tmp" id="value_tmp" class="form-control" required>
+                            <input style="display:none"  type="text" name="value" id="value" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="valueIdr">Value in IDR</label>
-                            <input type="text" name="valueIdr" id="valueIdr" class="form-control">
+                            <label class="labelRequired" for="valueIdr">Value in IDR</label>
+                            <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp" class="form-control" required>
+                            <input style="display:none" type="text" value="0" readonly name="valueIdr" id="valueIdr" class="form-control">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <center>
-                            <a class="btn btn-primary" onclick="addImport()">Add Import</a>
+                            <button type="submit" class="btn btn-primary" >Add Import</button>
                         </center>
                     </div>
-                    <div class="col-md-12">
+                    </form>
+                </div>
+                    <div class="col-md-12 mt-2">
                         <div id="dashImport">
                         </div>
+
+                        <div class="form-group" style="display: none" id="SaveButton">
+                            <form id="formx">
+                                <div class="mb-2">
+                                    <label for="fromto">From To</label>
+                                    <input type="text" name="fromto" id="fromto" class="form-control" required>
+                                </div>
+                            <center>
+                                <button type="submit" class="btn btn-primary" >Save</button>
+                            </center>
+                            </form>
+                        </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -177,11 +200,25 @@ $datas = $imports->getDataImport();
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
+
+        $("#formz").on('submit', function(e){
+            e.preventDefault();
+            addImport();
+            $("#SaveButton").css("display","block");
+        });
+
+        $("#formx").on('submit', function(e){
+            e.preventDefault();
+            saveImport();
+        });
+
+        console.clear();
     });
 
     function modalAdd() {
         $("#modalAdd").modal('show');
     }
+
 
     function addImport() {
         var dateOfPib = $("#dateOfPib").val();
@@ -260,4 +297,70 @@ $datas = $imports->getDataImport();
             });
         }
     }
+
 </script>
+
+<script type="text/javascript">
+        var formatter = new Intl.NumberFormat("en-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
+        var formatterComma = new Intl.NumberFormat("en-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 2 });
+
+        //format ribuan untuk qty
+		var tmp_qty = document.getElementById('qty_tmp');
+		tmp_qty.addEventListener('keyup', function(e){
+            let value = tmp_qty.value.replace(/[.]/gi, '');
+            let formatValue = formatter.format(value).replace(/[IDR]/gi, '').replace(/(\.+\d{2})/, '').trimLeft();
+            let showValue = formatValue.replace(/[,]/gi, '.');
+            if(isNaN(showValue)){
+                showValue=0;
+            }
+            $("#qty").val(value);
+            $("#qty_tmp").val(showValue);
+            hitungValueInIdr();
+		});
+
+
+        //format ribuan untuk value
+		var tmp_value = document.getElementById('value_tmp');
+		tmp_value.addEventListener('keyup', function(e){
+            console.clear();
+
+            //hapus titik dan ubah koma menjadi titik
+            let value =  tmp_value.value.replace(/[.]/gi, '').replace(/[,]/gi, '.');
+            if(isNaN(value)){
+                value = 0;
+            }
+
+            //cek apakah ada desimal
+            let decimalExists = tmp_value.value.search(",") > 0 ?true:false;
+
+            let arr =  value.split(".");
+            let formatValue = formatter.format(arr[0]).replace(/[IDR]/gi, '');
+            let formatValue2 = formatValue.replace(/[,]/gi, '.');
+
+
+
+            let decimal = arr[1] ? arr[1].substring(0, 2) : "" ;
+            let finalValue = formatValue2+ (decimalExists===true  ?","+decimal:"");
+            $("#value").val(value.trimStart());
+            $("#value_tmp").val(finalValue.trimStart());
+            hitungValueInIdr();
+		});
+
+        //fungsi untuk menghitung value in IDR
+        function hitungValueInIdr(){
+            let value = $("#value").val();
+            let qty = $("#qty").val();
+            let total = qty * value;
+            let finalTotal = total.toFixed(2);
+
+            let arr =  finalTotal.split(".");
+            console.log(arr)
+            let formatValue = formatter.format(arr[0]).replace(/[IDR]/gi, '');
+            let formatValue2 = formatValue.replace(/[,]/gi, '.');
+            let finalValue = formatValue2+ (arr[1] ?","+arr[1]:"");
+
+            $("#valueIdr").val(finalTotal);
+            $("#valueIdr_tmp").val("Rp. "+ finalValue);
+        }
+
+	</script>
