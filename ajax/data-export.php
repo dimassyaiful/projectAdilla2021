@@ -24,8 +24,8 @@ foreach ($datas as $data):
             <td><?=number_format($data->value, 2,",",".");?> </td>
             <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
             <td>
-                <button type="button" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
-                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
+                <button type="button" onclick="editModal(<?=$data->id;?>)"  class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
+                <button type="button" onclick="deleteConfirmation(<?=$data->id;?>)" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
             </td>
         </tr>
 	 <?php endforeach; ?>

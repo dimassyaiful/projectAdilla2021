@@ -274,7 +274,7 @@ include '../class/Import.class.php';
 
 <script> 
     var successEdit = "<div style='text-align:center;'><h3 class='text-success'><i class='fas fa-check'></i> </h3><h4>Data Berhasil di Edit</h4></div>";
-    var gagalEdit = "<div style='text-align:center;'><h3 class='text-success'><i class='fas fa-times'></i> </h3><h4>Maaf, terjadi kesalahan</h4></div>";
+    var gagalEdit = "<div style='text-align:center;'><h3 class='text-danger'><i class='fas fa-times'></i> </h3><h4>Maaf, terjadi kesalahan</h4></div>";
 
     function editModal(id){ 
         $('#editModal').modal('show'); 
@@ -304,8 +304,7 @@ include '../class/Import.class.php';
     $("#formy").on('submit', function(e){
             e.preventDefault(); 
             $("#saveEdit").attr('disabled','true');
-            let sendData = $( this ).serialize() ;
-            console.log(sendData); 
+            let sendData = $( this ).serialize() ; 
              $.ajax({
                 type: "POST",
                 
@@ -325,7 +324,7 @@ include '../class/Import.class.php';
                         });  
                         
                     }else{
-                        alert(data);
+                        console.log(data);
                         $('#editModalBody').html(gagalEdit); 
                     }
                 },

@@ -27,6 +27,19 @@ class Export
         return $datas;
     }
 
+    public function getDataExportDetails($id)
+    {
+        $this->sql = "SELECT * FROM `tbl_export` where id = '$id'";
+
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        $datas = null;
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
+            $datas = $result;
+        endwhile;
+        return $datas;
+    }
+
     public function refreshExportTemp()
     {
         $this->sql = "delete from `tbl_exporttemp`";
@@ -113,6 +126,41 @@ class Export
                 return false;
             }
             return false;
+        } catch (PDOException $e) {
+            return die($e->getMessage());
+        }
+    }
+
+    public function deleteExport($id)
+    {
+        $this->sql = "delete from `tbl_export` where id='$id'";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        return true;
+    }
+
+    public function editDataExport($data)
+    {
+        try {
+            $this->sql = "UPDATE tbl_export SET 
+             dateOfPib='".$data['dateOfPib']."',
+             docNo='".$data['docNo']."',
+             docType='".$data['docType']."',
+             noPengajuanDokumen='".$data['noPengajuanDokumen']."',
+             blNo='".$data['blNo']."',
+             vesselName='".$data['vesselName']."',
+             consignee='".$data['consignee']."',
+             remark='".$data['remark']."',
+             valuta='".$data['valuta']."',
+             value='".$data['value']."',
+             valueIdr='".$data['valueIdr']."',
+             qty='".$data['qty']."'
+             where
+             id='".$data['id']."'";
+            $this->statement = $this->conn->prepare($this->sql);
+            if ($this->statement->execute()) {
+                return true;
+            }
         } catch (PDOException $e) {
             return die($e->getMessage());
         }

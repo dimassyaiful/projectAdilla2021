@@ -33,5 +33,19 @@ if (isset($_POST)) {
         } else {
             echo var_dump($status);
         }
+    }elseif ($_POST['type'] == 'deleteExport') {
+        $status = $Export->deleteExport($_POST['id']);
+        if ($status) {
+            echo "successDelete";
+        } else {
+            echo var_dump($status);
+        }
+    }elseif ($_POST['type'] == 'editExport') {
+        $status = $Export->editDataExport($_POST);
+        if ($status) {
+            echo "successEdit";
+        } else {
+            echo var_dump($status);
+        }
     }
 }

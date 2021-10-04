@@ -1,8 +1,8 @@
 <?php
 
-include '../class/Import.class.php';
-$imports = new Import();
-$datas = $imports->getDataImportDetails($_POST['id']); 
+include '../class/Export.class.php';
+$export = new Export();
+$datas = $export->getDataExportDetails($_POST['id']); 
 $data = $datas;
     ?>
     
@@ -44,8 +44,8 @@ $data = $datas;
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label class="labelRequired" for="shipper">Shipper</label>
-                <input type="text" name="shipper" value="<?=$data->shipper;?>" class="form-control" required>
+                <label class="labelRequired" for="shipper">Consignee</label>
+                <input type="text" name="consignee" value="<?=$data->consignee;?>" class="form-control" required>
             </div>
             <div class="form-group">
                 <label class="labelRequired" for="remark">Remark</label>
@@ -67,8 +67,8 @@ $data = $datas;
             </div>
             <div class="form-group">
                 <label class="labelRequired" for="valueIdr">Value in IDR</label>
-                <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp_" value="<?=number_format($data->valueIdr, 2,',','.');?>" class="form-control" required>
-                <input style="display:none" type="text"  readonly name="valueIdr" id="valueIdr_" value="Rp.  <?=$data->valueIdr;?>" class="form-control">
+                <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp_" value="Rp.  <?=number_format($data->valueIdr, 2,',','.');?>" class="form-control" required>
+                <input style="display:none" type="text"  readonly name="valueIdr" id="valueIdr_" value="<?=$data->valueIdr;?>" class="form-control">
             </div>
         </div>
     </div> 
