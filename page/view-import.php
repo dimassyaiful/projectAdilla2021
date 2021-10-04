@@ -200,14 +200,17 @@ include '../class/Import.class.php';
 </div>
 
 <script>
+    var startDate = null;
+    var endDate = null;
+
     // Get Data + Filter
     $(document).ready(async function() {
         filter(true);
     });
 
     async function filter(firstTimeSet= false){
-        let startDate = $("#startDate").val();
-        let endDate   = $("#endDate").val();
+        startDate = $("#startDate").val();
+        endDate   = $("#endDate").val();
         if(firstTimeSet){
             startDate = "<?=date('Y-m-01');?>";
             endDate = "<?=date('Y-m-t');?>";
@@ -275,6 +278,12 @@ include '../class/Import.class.php';
     }
 
     async function reloadTable(data){
+        //title export
+        var options = {   year: 'numeric', month: 'long', day: 'numeric' };
+        var a = new Date(startDate).toLocaleString('id', options); 
+        var b = new Date(endDate).toLocaleString('id', options);  
+
+        //datatable
         $('#example').DataTable().clear().destroy();
         $("#tbBody").html(data);
         $("#example").DataTable({
@@ -295,6 +304,7 @@ include '../class/Import.class.php';
                 },
                 {
                     extend: 'excel',
+                    title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
                     }, footer: true
@@ -303,7 +313,7 @@ include '../class/Import.class.php';
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
                     pageSize: 'legal',
-                    title: function () { return "Data Import"; },
+                    title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
                     }, 
@@ -331,7 +341,7 @@ include '../class/Import.class.php';
                     extend: 'print',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',
-                    title: function () { return "Data Import"; },
+                    title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
                     }, footer: true
