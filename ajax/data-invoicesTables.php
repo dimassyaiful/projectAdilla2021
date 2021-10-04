@@ -12,7 +12,7 @@ foreach ($datas as $data):
             <td><?=$data->date;?></td>
             <td><?=$data->fromto;?></td>
             <td><?=$data->type;?></td>
-            <td><a href="../process/print-invoices.php?id=<?=$data->id;?>" class="btn btn-warning">Print</a></td>
+            <td><a  target="_blank" href="../process/print-invoices.php?id=<?=$data->id;?>" class="btn btn-warning">Print</a></td>
         </tr>
 	 <?php endforeach; ?>
              

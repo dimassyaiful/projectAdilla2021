@@ -1,15 +1,23 @@
-- import/export input cannot be null
+✔ import/export input cannot be null
+✔ tambahin Rp.
+✔ pdf kepotong, solusi ganti lanscape . tambahin total value
+✔ add filter tanggal awal/akhir 
+✔ default tanggal bulan sekarangg
+✔ filter invoice tanggal & from to
+✔ value idr = qty * value
 - edit/delete 
-- tambahin Rp.
-- pdf kepotong, solusi ganti lanscape . tambahin total value
-- add filter tanggal awal/akhir 
-- default tanggal bulan sekarangg
-- filter invoice tanggal & from to
-- value idr = qty * value
+- perbaiki report invoice
 
 
 BUGS :
-- ubah type untuk kolom value, valueidr menjadi decimal (13,3)
-  karena ketika diinput menjadi tidak sesuai
-- Data temporary table tidak hilang ketika di refresh, mengakibatkan data ambigu
+✔ ubah type untuk kolom value, valueidr menjadi decimal (13,3)
+  karena ketika diinput menjadi tidak sesuai, tipe float melakukan pembulatan sendiri 
+
+- tidak bisa memperbaiki report untuk invoice, karena import & export  membuat invoice sendiri. sehingga tidak bisa grouping.
+solusi : 
+  > rebuild alur backend modul invoices
+  > atau tidak perlu di rebuild (memang khusus untuk import atau export, tapi tidak bisa keduanya.
+
 - add data invoice langsung menambahkan ke database, sehigga data import/export bisa nol
+
+- PDF TERMS & PO tidak ada sumber data
