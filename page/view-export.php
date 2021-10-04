@@ -1,8 +1,6 @@
 <?php
 include 'header.php';
-include '../class/Export.class.php';
-$export = new Export();
-$datas = $export->getDataExport();
+include '../class/Export.class.php'; 
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -25,10 +23,34 @@ $datas = $export->getDataExport();
         <div class="row">
             <div class="col-md-12">
                 <div class="card shadow">
-                    <div class="card-header">
-                        <div class="card-title">Data Export</div>
-                        <div class="card-tools">
-                            <a class="btn btn-primary" onclick="modalAdd()">Add Data Export</a>
+                <div class="card-header">
+                        <div class="card-title col-md-8"  >
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                <div class="form-group ">
+                                    <label style="font-size: 14px;">Dari Tanggal : </label>
+                                    <input id="startDate" type="date" class="form-control form-control-sm">
+                                    <small style="display:none" class="text-danger" id="dateMsg1"> </small>
+                                </div>
+                                </div>
+                                <div class="col-md-4 col-xs-4">
+                                <div class="form-group  ">
+                                    <label style="font-size: 14px;">Sampai Tanggal : </label>
+                                    <input id="endDate" type="date" class="form-control form-control-sm">
+                                    <small style="display:none" class="text-danger  " id="dateMsg2"> </small>
+                                </div>
+                                </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <button class="btn btn-sm btn-success filterBtn" onclick="filter()" id="filterBtn"> <i id="filterIcon" class="fas fa-filter"></i> Filter</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-tools col-md-4">
+                        <div class="form-group ">
+                                    <label style="font-size: 14px;" >Total Value In IDR </label>
+                                    <h3 class="totalValue">Rp. 0</h3>
+                                </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -52,35 +74,16 @@ $datas = $export->getDataExport();
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php
-foreach ($datas as $data):
-?>
-                                        <tr>
-                                            <td>
-                                                <?=$data->idInvoices;?>
-                                            </td>
-                                            <td><?=$data->dateOfPib;?></td>
-                                            <td><?=$data->docNo;?></td>
-                                            <td><?=$data->docType;?></td>
-                                            <td><?=$data->noPengajuanDokumen;?></td>
-                                            <td><?=$data->blNo;?></td>
-                                            <td><?=$data->vesselName;?></td>
-                                            <td><?=$data->consignee;?></td>
-                                            <td><?=$data->remark;?></td>
-                                            <td><?=number_format($data->qty);?></td>
-                                            <td><?=$data->valuta;?></td>
-                                            <td><?=number_format($data->value, 2);?> </td>
-                                            <td>Rp. <?=number_format($data->valueIdr, 2);?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
-                                                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
-                                            </td>
-                                        </tr>
-                                    <?php
-endforeach;
-?>
+                                <tbody id="tbBody">
+                                    
                                 </tbody>
+                                <tfoot style="display: none;">
+                                <tr>
+                                    <th colspan=11> </th>  
+                                    <th align="right"> Total: </th> 
+                                    <th class="totalValue"> </th>  
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -193,49 +196,161 @@ endforeach;
 
 
 <?php include 'footer.php'?>
+
 <script>
-    $(document).ready(function() {
+    var startDate = null;
+    var endDate = null;
+
+    // Get Data + Filter
+    $(document).ready(async function() {
+        filter(true);
+    });
+
+    async function filter(firstTimeSet= false){
+        startDate = $("#startDate").val();
+        endDate   = $("#endDate").val();
+        if(firstTimeSet){
+            startDate = "<?=date('Y-m-01');?>";
+            endDate = "<?=date('Y-m-t');?>";
+            $("#startDate").val(startDate);
+            $("#endDate").val(endDate);
+        }else{
+            if(!startDate){
+                $("#dateMsg1").html("Tidak Boleh Kosong");
+                $("#dateMsg1").fadeIn();
+                return;
+            }else{
+                $("#dateMsg1").fadeOut();
+            }
+            if(!endDate){
+                $("#dateMsg2").html("Tidak Boleh Kosong");
+                $("#dateMsg2").fadeIn();
+                return;
+            }else{
+                $("#dateMsg2").fadeOut();
+            }
+
+            let dt1 = new Date(startDate);
+            let dt2 = new Date(endDate);
+            if(dt1 > dt2) {
+                $("#dateMsg2").html("Tidak boleh lebih kecil");
+                $("#dateMsg2").fadeIn();
+                return;
+            }else{
+                $("#dateMsg2").fadeOut();
+            }
+        }
+
+
+
+
+        $("#filterIcon").attr('class', 'fas fa-spin fa-sync fa-fw');
+        $("#filterBtn").attr('disabled', 'true');
+        setTimeout(async() => {
+            let data = await getData({
+                startDate: startDate,
+                endDate: endDate
+            });
+            await reloadTable(data);
+            $("#filterIcon").attr('class', 'fas fa-filter');
+            $("#filterBtn").removeAttr('disabled');
+        }, 300);
+    }
+
+    async function getData({startDate, endDate}){
+        return await $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../ajax/data-export.php",
+            data: {
+                startDate: startDate,
+                endDate: endDate,
+            },
+            success: function(data){
+                return data;
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    }
+
+    async function reloadTable(data){
+        //title export
+        var options = {   year: 'numeric', month: 'long', day: 'numeric' };
+        var a = new Date(startDate).toLocaleString('id', options); 
+        var b = new Date(endDate).toLocaleString('id', options);  
+
+        //datatable
+        $('#example').DataTable().clear().destroy();
+        $("#tbBody").html(data);
         $("#example").DataTable({
             dom: 'Bfrtip',
+            bDestroy: true, 
             buttons: [
                 {
                     extend: 'copy',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    } , footer: true
                 },
                 {
                     extend: 'excel',
+                    title: function () { return `Data Export Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 },
                 {
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
-                    pageSize: 'LEGAL',
-                    title: function () { return "Data Export"; },
+                    pageSize: 'legal',
+                    title: function () { return `Data Export \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }, 
+                    footer: true, 
+                    customize : function(doc) {
+                        console.log(doc);
+                        doc.content[1].table.widths = [ 
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',     
+                            '10%',   
+                            '15%',   
+                        ];
                     }
                 },
                 {
                     extend: 'print',
                     orientation: 'landscape',
                     pageSize: 'LEGAL',
-                    title: function () { return "Data Export"; },
+                    title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 }
             ]
         });
+    }
+</script>
+
+<script>
+    $(document).ready(function() { 
 
         $("#formz").on('submit', function(e){
             e.preventDefault();

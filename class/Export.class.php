@@ -15,9 +15,9 @@ class Export
         $this->conn = $database->getConnection();
     }
 
-    public function getDataExport()
+    public function getDataExport($startDate, $endDate)
     {
-        $this->sql = "SELECT * FROM `tbl_export`";
+        $this->sql = "SELECT * FROM `tbl_export` where dateOfPib >= '$startDate' and dateOfPib <= '$endDate'";
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
