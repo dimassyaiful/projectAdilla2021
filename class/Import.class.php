@@ -15,9 +15,10 @@ class Import
         $this->conn = $database->getConnection();
     }
 
-    public function getDataImport()
+    public function getDataImport($startDate, $endDate)
     {
-        $this->sql = "SELECT * FROM `tbl_import`";
+        $this->sql = "SELECT * FROM `tbl_import` where dateOfPib >= '$startDate' and dateOfPib <= '$endDate'";
+
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();

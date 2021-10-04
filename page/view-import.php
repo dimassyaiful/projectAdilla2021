@@ -1,8 +1,8 @@
 <?php
 include 'header.php';
 include '../class/Import.class.php';
-$imports = new Import();
-$datas = $imports->getDataImport();
+// $imports = new Import();
+// $datas = $imports->getDataImport();
 ?>
 <!-- Content Header (Page header) -->
 
@@ -14,7 +14,7 @@ $datas = $imports->getDataImport();
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Import</a></li>
+                    <li class="breadcrumb-item"><a class="btn btn-primary" onclick="modalAdd()">Add Data Import</a></li>
                 </ol>
             </div>
         </div>
@@ -27,16 +27,39 @@ $datas = $imports->getDataImport();
             <div class="col-md-12">
                 <div class="card shadow">
                     <div class="card-header">
-                        <div class="card-title">
-                            Data Import
+                        <div class="card-title col-md-8"  >
+                            <div class="row">
+                                <div class="col-md-4 col-xs-4">
+                                <div class="form-group ">
+                                    <label style="font-size: 14px;">Dari Tanggal : </label>
+                                    <input id="startDate" type="date" class="form-control form-control-sm">
+                                    <small style="display:none" class="text-danger" id="dateMsg1"> </small>
+                                </div>
+                                </div>
+                                <div class="col-md-4 col-xs-4">
+                                <div class="form-group  ">
+                                    <label style="font-size: 14px;">Sampai Tanggal : </label>
+                                    <input id="endDate" type="date" class="form-control form-control-sm">
+                                    <small style="display:none" class="text-danger  " id="dateMsg2"> </small>
+                                </div>
+                                </div>
+                                <div class="col-md-4 col-xs-12">
+                                    <button class="btn btn-sm btn-success filterBtn" onclick="filter()" id="filterBtn"> <i id="filterIcon" class="fas fa-filter"></i> Filter</button>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="card-tools">
-                            <a class="btn btn-primary" onclick="modalAdd()">Add Data Import</a>
+                        <div class="card-tools col-md-4">
+                        <div class="form-group ">
+                                    <label style="font-size: 14px;" >Total Value In IDR </label>
+                                    <h3 id="totalValue">Rp. 0</h3>
+                                </div>
                         </div>
                     </div>
+
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                        <div class="">
+                            <table id="example" class="table table-striped table-bordered table-responsive" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Invoice Number</th>
@@ -55,34 +78,8 @@ $datas = $imports->getDataImport();
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php
-foreach ($datas as $data):
-?>
-                                        <tr>
-                                            <td>
-                                                <?=$data->idInvoices;?>
-                                            </td>
-                                            <td><?=$data->dateOfPib;?></td>
-                                            <td><?=$data->docNo;?></td>
-                                            <td><?=$data->docType;?></td>
-                                            <td><?=$data->noPengajuanDokumen;?></td>
-                                            <td><?=$data->blNo;?></td>
-                                            <td><?=$data->vesselName;?></td>
-                                            <td><?=$data->shipper;?></td>
-                                            <td><?=$data->remark;?></td>
-                                            <td><?=number_format($data->qty);?></td>
-                                            <td><?=$data->valuta;?></td>
-                                            <td><?=number_format($data->value, 2);?> </td>
-                                            <td>Rp. <?=number_format($data->valueIdr, 2);?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
-                                                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
-                                            </td>
-                                        </tr>
-                                    <?php
-endforeach;
-?>
+                                <tbody  id="tbBody">
+
                                 </tbody>
                             </table>
                         </div>
@@ -90,8 +87,20 @@ endforeach;
                 </div>
             </div>
         </div>
+
+
+        <!-- <div class="card">
+        <div class="card-body ">
+            <div class="row" style="font-size: 20px; text-align: right; ">
+                <div class="col-md-12"> Total Value In IDR  : <div id="totalValue" style="display:inline-block; font-weight: bold;"> Rp. 0</div></div>
+            </div>
+        </div>
+        </div> -->
     </div>
+
+
 </section>
+
 
 <?php include 'footer.php'?>
 
@@ -192,9 +201,86 @@ endforeach;
 </div>
 
 <script>
-    $(document).ready(function() {
+    // Get Data + Filter
+    $(document).ready(async function() {
+        filter(true);
+    });
+
+    async function filter(firstTimeSet= false){
+        let startDate = $("#startDate").val();
+        let endDate   = $("#endDate").val();
+        if(firstTimeSet){
+            startDate = "<?=date('Y-m-01');?>";
+            endDate = "<?=date('Y-m-t');?>";
+            $("#startDate").val(startDate);
+            $("#endDate").val(endDate);
+        }else{
+            if(!startDate){
+                $("#dateMsg1").html("Tidak Boleh Kosong");
+                $("#dateMsg1").fadeIn();
+                return;
+            }else{
+                $("#dateMsg1").fadeOut();
+            }
+            if(!endDate){
+                $("#dateMsg2").html("Tidak Boleh Kosong");
+                $("#dateMsg2").fadeIn();
+                return;
+            }else{
+                $("#dateMsg2").fadeOut();
+            }
+
+            let dt1 = new Date(startDate);
+            let dt2 = new Date(endDate);
+            if(dt1 > dt2) {
+                $("#dateMsg2").html("Tidak boleh lebih kecil");
+                $("#dateMsg2").fadeIn();
+                return;
+            }else{
+                $("#dateMsg2").fadeOut();
+            }
+        }
+
+
+
+
+        $("#filterIcon").attr('class', 'fas fa-spin fa-sync fa-fw');
+        $("#filterBtn").attr('disabled', 'true');
+        setTimeout(async() => {
+            let data = await getData({
+                startDate: startDate,
+                endDate: endDate
+            });
+            await reloadTable(data);
+            $("#filterIcon").attr('class', 'fas fa-filter');
+            $("#filterBtn").removeAttr('disabled');
+        }, 300);
+    }
+
+    async function getData({startDate, endDate}){
+        return await $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../ajax/data-import.php",
+            data: {
+                startDate: startDate,
+                endDate: endDate,
+            },
+            success: function(data){
+                return data;
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    }
+
+    async function reloadTable(data){
+        $('#example').DataTable().clear().destroy();
+        $("#tbBody").html(data);
         $("#example").DataTable({
             dom: 'Bfrtip',
+            bDestroy: true,
             buttons: [
                 {
                     extend: 'copy',
@@ -234,6 +320,12 @@ endforeach;
                 }
             ]
         });
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+
 
         $("#formz").on('submit', function(e){
             e.preventDefault();
@@ -347,6 +439,6 @@ endforeach;
 </script>
 
 
-<?php 
-include '../dist/customscript.php'; 
+<?php
+include '../dist/customscript.php';
 ?>

@@ -1,7 +1,7 @@
 - import/export input cannot be null
 - edit/delete 
 - tambahin Rp.
-- pdf kepotong, solui ganti lanscape . tambahin total value
+- pdf kepotong, solusi ganti lanscape . tambahin total value
 - add filter tanggal awal/akhir 
 - default tanggal bulan sekarangg
 - filter invoice tanggal & from to

@@ -33,6 +33,16 @@ include 'session.php';
             content: "*";
             color:red;
         }
+        .filterBtn{
+            margin-top: 34px;
+        }
+        @media only screen and (max-width: 768px) {
+            .filterBtn{
+                margin-top: 0px;
+                text-align: center;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
