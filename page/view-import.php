@@ -52,18 +52,18 @@ include '../class/Import.class.php';
                         <div class="card-tools col-md-4">
                         <div class="form-group ">
                                     <label style="font-size: 14px;" >Total Value In IDR </label>
-                                    <h3 id="totalValue">Rp. 0</h3>
+                                    <h3 class="totalValue">Rp. 0</h3>
                                 </div>
                         </div>
                     </div>
 
                     <div class="card-body">
-                        <div class="">
-                            <table id="example" class="table table-striped table-bordered table-responsive" style="width:100%">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-striped table-bordered " style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Invoice Number</th>
-                                        <th>Date of Pib</th>
+                                        <th style="min-width: 100px">Invoice Number</th>
+                                        <th style="min-width: 100px">Date of Pib</th>
                                         <th>Doc No.</th>
                                         <th>Doc Type</th>
                                         <th>No. Pengajuan Dokumen</th>
@@ -73,29 +73,28 @@ include '../class/Import.class.php';
                                         <th>remark</th>
                                         <th>Qty</th>
                                         <th>Valuta</th>
-                                        <th>Value</th>
-                                        <th>Value in IDR</th>
+                                        <th style="min-width: 150px">Value</th>
+                                        <th style="min-width: 150px">Value in IDR   </th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody  id="tbBody">
 
                                 </tbody>
+                                <tfoot style="display: none;">
+                                <tr>
+                                    <th colspan=11> </th>  
+                                    <th align="right"> Total: </th> 
+                                    <th class="totalValue"> </th>  
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        <!-- <div class="card">
-        <div class="card-body ">
-            <div class="row" style="font-size: 20px; text-align: right; ">
-                <div class="col-md-12"> Total Value In IDR  : <div id="totalValue" style="display:inline-block; font-weight: bold;"> Rp. 0</div></div>
-            </div>
-        </div>
-        </div> -->
+ 
     </div>
 
 
@@ -280,33 +279,52 @@ include '../class/Import.class.php';
         $("#tbBody").html(data);
         $("#example").DataTable({
             dom: 'Bfrtip',
-            bDestroy: true,
+            bDestroy: true, 
             buttons: [
                 {
                     extend: 'copy',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    } , footer: true
                 },
                 {
                     extend: 'excel',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 },
                 {
                     extend: 'pdfHtml5',
                     orientation: 'landscape',
-                    pageSize: 'LEGAL',
+                    pageSize: 'legal',
                     title: function () { return "Data Import"; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                    }, 
+                    footer: true, 
+                    customize : function(doc) {
+                        console.log(doc);
+                        doc.content[1].table.widths = [ 
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',   
+                            'auto',     
+                            '10%',   
+                            '15%',   
+                        ];
                     }
                 },
                 {
@@ -316,7 +334,7 @@ include '../class/Import.class.php';
                     title: function () { return "Data Import"; },
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }
+                    }, footer: true
                 }
             ]
         });
