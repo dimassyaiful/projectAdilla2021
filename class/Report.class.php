@@ -15,10 +15,10 @@ class Report
         $this->conn = $database->getConnection();
     }
 
-    public function getData()
+    public function getData($startDate, $endDate)
     {
         try {
-            $this->sql = "SELECT * FROM tbl_invoices as i JOIN (SELECT * FROM tbl_import UNION SELECT * FROM tbl_export) as ie ON i.id = ie.idInvoices";
+            $this->sql = "SELECT * FROM tbl_invoices as i JOIN (SELECT * FROM tbl_import  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate' UNION SELECT * FROM tbl_export  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate' ) as ie ON i.id = ie.idInvoices";
             $this->statement = $this->conn->prepare($this->sql);
             if (!$this->statement->execute()) return false;
             $results = array();

@@ -294,13 +294,15 @@ include '../class/Import.class.php';
                     extend: 'copy',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    }, footer: true
+                    }, footer: true,
+                    title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
-                    } , footer: true
+                    } , footer: true,
+                    title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                 },
                 {
                     extend: 'excel',

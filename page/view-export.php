@@ -11,7 +11,7 @@ include '../class/Export.class.php';
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Export</a></li>
+                    <li class="breadcrumb-item"><a class="btn btn-primary" onclick="modalAdd()">Add Data Export</a></li>
                 </ol>
             </div>
         </div>
