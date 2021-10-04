@@ -14,9 +14,9 @@ class Invoice
         $this->conn = $database->getConnection();
     }
 
-    public function getDataInvoice()
+    public function getDataInvoice($startDate, $endDate)
     {
-        $this->sql = "SELECT * FROM tbl_invoices";
+        $this->sql = "SELECT * FROM tbl_invoices where date >= '$startDate' and date <= '$endDate'";
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
