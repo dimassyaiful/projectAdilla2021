@@ -33,5 +33,19 @@ if (isset($_POST)) {
         } else {
             echo var_dump($status);
         }
+    }elseif ($_POST['type'] == 'deleteImport') {
+        $status = $Import->deleteImport($_POST['id']);
+        if ($status) {
+            echo "successDelete";
+        } else {
+            echo var_dump($status);
+        }
+    }elseif ($_POST['type'] == 'editImport') {
+        $status = $Import->editDataImport($_POST);
+        if ($status) {
+            echo "successEdit";
+        } else {
+            echo var_dump($status);
+        }
     }
 }

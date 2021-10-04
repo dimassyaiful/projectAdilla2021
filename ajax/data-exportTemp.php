@@ -29,10 +29,10 @@ foreach ($datas as $data):
                     <td><?=$data->vesselName;?></td>
                     <td><?=$data->consignee;?></td>
                     <td><?=$data->remark;?></td>
-                    <td><?=number_format($data->qty);?></td>
+                    <td><?=number_format($data->qty,0,",",".");?></td>
                     <td><?=$data->valuta;?></td>
-                    <td><?=number_format($data->value, 2);?></td>
-                    <td>Rp. <?=number_format($data->valueIdr, 2);?></td>
+                    <td><?=number_format($data->value, 2,",",".");?></td>
+                    <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
                 </tr>
             <?php
 endforeach;

@@ -38,8 +38,9 @@ $(document).ready(function () {
 
 
         let decimal = arr[1] ? arr[1].substring(0, 2) : "";
-        let finalValue = formatValue2 + (decimalExists === true ? "," + decimal : "");
-        $("#value").val(value.trimStart());
+        let Value = arr[0] + (decimalExists === true ? "." + decimal : "");
+        let finalValue = formatValue2 + (decimalExists === true ? "," + decimal : ""); 
+        $("#value").val(Value.trimStart());
         $("#value_tmp").val(finalValue.trimStart());
         hitungValueInIdr();
     });

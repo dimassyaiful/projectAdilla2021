@@ -19,13 +19,13 @@ foreach ($datas as $data):
             <td><?=$data->vesselName;?></td>
             <td><?=$data->shipper;?></td>
             <td><?=$data->remark;?></td>
-            <td><?=number_format($data->qty);?></td>
+            <td><?=number_format($data->qty,0,",",".");?></td>
             <td><?=$data->valuta;?></td>
-            <td><?=number_format($data->value, 2);?> </td>
-            <td>Rp. <?=number_format($data->valueIdr, 2);?></td>
+            <td><?=number_format($data->value, 2,",",".");?> </td>
+            <td>Rp. <?= number_format($data->valueIdr, 2,",",".");?></td>
             <td>
-                <button type="button" class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
-                <button type="button" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
+                <button type="button" onclick="editModal(<?=$data->id;?>)"  class="btn btn-sm btn-success"><i class="fas fa-pencil-alt"></i> </button>
+                <button type="button" onclick="deleteConfirmation(<?=$data->id;?>)" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </button>
             </td>
         </tr>
 	 <?php endforeach; ?>

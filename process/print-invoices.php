@@ -236,9 +236,9 @@ if (isset($_GET)) {
 	                <tr>
 	                    <td>' . $no++ . '</td>
 	                    <td>' . $result->vesselName . '</td>
-	                    <td style="text-align: right; padding-right: 20px;">' . number_format($result->qty) . '</td>
-	                    <td style="text-align: right; padding-right: 20px;">'.$result->valuta . ' '.number_format($result->value , 2) . '</td>
-	                    <td style="text-align: right; padding-right: 20px;"> IDR ' . number_format($result->valueIdr  , 2). '</td>
+	                    <td style="text-align: right; padding-right: 20px;">' . number_format($result->qty,0,",",".") . '</td>
+	                    <td style="text-align: right; padding-right: 20px;">'.$result->valuta . ' '.number_format($result->value , 2,",",".") . '</td>
+	                    <td style="text-align: right; padding-right: 20px;"> IDR ' . number_format($result->valueIdr  , 2,",","."). '</td>
 	                </tr>
 	                ';
             endwhile;
@@ -249,9 +249,9 @@ if (isset($_GET)) {
             $html .= ' 
                 <tr> 
                 <td colspan=2 style="font-weight: bold; text-align:right; padding-right: 20px;">TOTAL</td>
-                <td style="text-align: right;font-weight: bold; padding-right: 20px;">'.number_format($totalQty).'</td>
+                <td style="text-align: right;font-weight: bold; padding-right: 20px;">'.number_format($totalQty,0,",",".").'</td>
                 <td style="text-align: right;font-weight: bold; padding-right: 20px;">  </td>
-                <td style="text-align: right;font-weight: bold; padding-right: 20px;">IDR '.number_format($totalValueIdr  , 2).'</td>
+                <td style="text-align: right;font-weight: bold; padding-right: 20px;">IDR '.number_format($totalValueIdr  , 2,",",".").'</td>
               </tr> 
               </table> 
 

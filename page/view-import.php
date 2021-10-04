@@ -199,6 +199,145 @@ include '../class/Import.class.php';
     </div>
 </div>
 
+<!-- Modal Confirmation --> 
+<div class="modal fade" id="confirmation" tabindex="-1" role="dialog" >
+  <div class="modal-dialog  modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure want to delete data ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" onclick="deleteData()" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    let deleteId = null;
+    function deleteConfirmation(id){ 
+        $('#confirmation').modal('show');
+        deleteId = id;
+    }
+    async function deleteData(){
+        console.log(deleteId);
+        await  $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../process/import.process.php",
+            data: {
+                type: 'deleteImport',
+                id: deleteId 
+            },
+            success: function(data){
+                $('#confirmation').modal('hide');
+                filter();
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    }
+</script>
+<!-- End Modal Confirmation -->
+
+
+<!-- Modal Edit --> 
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" >
+<form method="post" id="formy">
+  <div class="modal-dialog   modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="editModalBody">
+         
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" id="saveEdit" class="btn btn-success">Save</button>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+
+<script> 
+    var successEdit = "<div style='text-align:center;'><h3 class='text-success'><i class='fas fa-check'></i> </h3><h4>Data Berhasil di Edit</h4></div>";
+    var gagalEdit = "<div style='text-align:center;'><h3 class='text-success'><i class='fas fa-times'></i> </h3><h4>Maaf, terjadi kesalahan</h4></div>";
+
+    function editModal(id){ 
+        $('#editModal').modal('show'); 
+        getFormEdit(id);
+    }
+
+    async function getFormEdit(id){ 
+        $("#saveEdit").removeAttr('disabled');
+        $("#saveEdit").css('display','block');
+
+        await  $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../ajax/edit-data-import.php",
+            data: { 
+                id: id 
+            },
+            success: function(data){
+                $('#editModalBody').html(data); 
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    }
+
+    $("#formy").on('submit', function(e){
+            e.preventDefault(); 
+            $("#saveEdit").attr('disabled','true');
+            let sendData = $( this ).serialize() ;
+            console.log(sendData); 
+             $.ajax({
+                type: "POST",
+                
+                dataType: "html",
+                url: "../process/import.process.php",
+                data: sendData+"&type=editImport", 
+                success: function(data){
+                    if(data=="successEdit"){
+                        $("#saveEdit").css('display','none');
+                        $('#editModalBody').fadeOut(400, () => { 
+                            $('#editModalBody').html(successEdit); 
+                            $('#editModalBody').fadeIn(); 
+                            filter();
+                            setTimeout(() => { 
+                                $('#editModal').modal('hide'); 
+                            }, 500);
+                        });  
+                        
+                    }else{
+                        alert(data);
+                        $('#editModalBody').html(gagalEdit); 
+                    }
+                },
+                error: function(err) {
+                    console.log(err)
+                }
+            });
+        });
+</script>
+
+<!--  End Modal Edit  -->
+
 <script>
     var startDate = null;
     var endDate = null;

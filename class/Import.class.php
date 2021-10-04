@@ -28,6 +28,20 @@ class Import
         return $datas;
     }
 
+    
+    public function getDataImportDetails($id)
+    {
+        $this->sql = "SELECT * FROM `tbl_import` where id = '$id'";
+
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        $datas = null;
+        while ($result = $this->statement->fetch(PDO::FETCH_OBJ)):
+            $datas = $result;
+        endwhile;
+        return $datas;
+    }
+
     public function insertDataImprot($data)
     {
         try {
@@ -77,6 +91,14 @@ class Import
         return true;
     }
 
+    public function deleteImport($id)
+    {
+        $this->sql = "delete from `tbl_import` where id='$id'";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        return true;
+    }
+
     public function saveDataImport($data)
     {
         try {
@@ -118,4 +140,33 @@ class Import
             return die($e->getMessage());
         }
     }
+
+    public function editDataImport($data)
+    {
+        try {
+            $this->sql = "UPDATE tbl_import SET 
+             dateOfPib='".$data['dateOfPib']."',
+             docNo='".$data['docNo']."',
+             docType='".$data['docType']."',
+             noPengajuanDokumen='".$data['noPengajuanDokumen']."',
+             blNo='".$data['blNo']."',
+             vesselName='".$data['vesselName']."',
+             shipper='".$data['shipper']."',
+             remark='".$data['remark']."',
+             valuta='".$data['valuta']."',
+             value='".$data['value']."',
+             valueIdr='".$data['valueIdr']."',
+             qty='".$data['qty']."'
+             where
+             id='".$data['id']."'";
+            $this->statement = $this->conn->prepare($this->sql);
+            if ($this->statement->execute()) {
+                return true;
+            }
+        } catch (PDOException $e) {
+            return die($e->getMessage());
+        }
+    }
+
+    
 }
