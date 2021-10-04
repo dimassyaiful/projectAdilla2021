@@ -4,6 +4,10 @@ class CurencyLang
 {
     static function toEnglish($number)
     {
+        if($number <= 0){
+          return " - ";
+        }
+
         $hyphen      = '-';
         $conjunction = ' and ';
         $separator   = ', ';
@@ -109,7 +113,7 @@ class CurencyLang
             $string .= implode(' ', $words);
         }
 
-        return ucwords($string);
+        return ucwords($string." Rupiah ");
     }
   }
 function penyebut($nilai) {
@@ -140,10 +144,10 @@ function penyebut($nilai) {
   return $temp;
 }
 function terbilang($nilai) {
-  if($nilai<0) {
-    $hasil = "minus ". trim(penyebut($nilai));
+  if($nilai<=0) {
+    $hasil = " - ";
   } else {
-    $hasil = trim(penyebut($nilai));
+    $hasil = trim(penyebut($nilai))." Rupiah";
   }     		
   return $hasil;
 }
@@ -213,7 +217,7 @@ if (isset($_GET)) {
                 </tr>
                 <tr>
                   <td></td>
-                  <td style="font-weight: bold">Import</td>
+                  <td style="font-weight: bold">'.$type.'</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -239,8 +243,8 @@ if (isset($_GET)) {
 	                ';
             endwhile;
             
-            $terbilang = terbilang($totalValueIdr)." Rupiah";
-            $say =  CurencyLang::toEnglish($totalValueIdr)." Rupiah";
+            $terbilang = terbilang($totalValueIdr);
+            $say =  CurencyLang::toEnglish($totalValueIdr) ;
 
             $html .= ' 
                 <tr> 
