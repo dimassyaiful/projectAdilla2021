@@ -2,8 +2,7 @@
 
 include '../class/Invoice.class.php';
 $invoices = new Invoice();
-$datas = $invoices->getDataInvoice($_POST['startDate'], $_POST['endDate']); 
-print_r($datas);
+$datas = $invoices->getDataInvoice($_POST['startDate'], $_POST['endDate']);  
 foreach ($datas as $data): 
     ?>
         <tr>
