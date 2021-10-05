@@ -156,11 +156,11 @@ function terbilang($nilai) {
 if (isset($_GET)) {
     if ($_GET['id'] != '' || $_GET['id'] != null) {
         require '../plugins/html2pdf/autoload.php';
-        $id = $_GET['id'];
-        $host = "localhost";
-        $username = "root";
-        $password = "";
-        $db = "aldilla";
+        $id = $_GET['id']; 
+        $host = "intonasikopi.com";
+        $username = "u1555875_aldilla";
+        $password = "SuksesBerkah2021";
+        $db = "u1555875_aldilla";
         try {
             $conn = new PDO("mysql:host=$host;dbname=$db", $username, $password);
             // set the PDO error mode to exception
