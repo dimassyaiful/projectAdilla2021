@@ -67,7 +67,7 @@ $data = $datas;
             </div>
             <div class="form-group">
                 <label class="labelRequired" for="valueIdr">Value in IDR</label>
-                <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp_" value="<?=number_format($data->valueIdr, 2,',','.');?>" class="form-control" required>
+                <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp_" value="Rp. <?=number_format($data->valueIdr, 2,',','.');?>" class="form-control" required>
                 <input style="display:none" type="text"  readonly name="valueIdr" id="valueIdr_" value="Rp.  <?=$data->valueIdr;?>" class="form-control">
             </div>
         </div>
