@@ -3,6 +3,7 @@
 include '../class/Invoice.class.php';
 $invoices = new Invoice();
 $datas = $invoices->getDataInvoice($_POST['startDate'], $_POST['endDate']); 
+print_r($datas);
 foreach ($datas as $data): 
     ?>
         <tr>
