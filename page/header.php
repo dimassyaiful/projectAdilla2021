@@ -136,6 +136,14 @@ include 'session.php';
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="view-kurs.php" class="nav-link">
+                                <i class="nav-icon fas fa-money-check-alt"></i>
+                                <p>
+                                    Setting Kurs
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="logout.php" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>
