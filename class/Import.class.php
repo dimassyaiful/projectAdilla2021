@@ -45,7 +45,7 @@ class Import
     public function insertDataImprot($data)
     {
         try {
-            $this->sql = "INSERT INTO `tbl_importTemp`(`dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
+            $this->sql = "INSERT INTO `tbl_importtemp`(`dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
             `shipper`, `remark`, `valuta`, `value`, `valueIdr`,`qty`) VALUES (
                '" . $data['dateOfPib'] . "',
                '" . $data['docNo'] . "',

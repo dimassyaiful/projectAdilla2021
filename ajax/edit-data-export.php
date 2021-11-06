@@ -1,9 +1,22 @@
 <?php
 
 include '../class/Export.class.php';
+include '../class/Kurs.class.php'; 
+
 $export = new Export();
 $datas = $export->getDataExportDetails($_POST['id']); 
 $data = $datas;
+  
+$kurs = new Kurs();
+$dataKurs = $kurs->getData();
+
+
+function dropdownSelected($val1,$val2){
+    if($val1 == $val2){
+        return "selected";
+    }
+}
+
     ?>
     
     <div class="row">
@@ -58,7 +71,17 @@ $data = $datas;
             </div>
             <div class="form-group">
                 <label class="labelRequired" for="valuta">Valuta</label>
-                <input type="text" name="valuta" value="<?=$data->valuta;?>" class="form-control" required>
+                
+                <select onchange="setValue_(this.value);" class="form-control" name="valuta" id="valuta">
+                    <option value=""> -- Pilih --</option>
+                    <?php foreach ($dataKurs as $key => $val) {
+                        $valuetmp = number_format($val->kurs,0,",",".");
+                    ?>
+                        <option  
+                        <?= dropdownSelected($val->kode,$data->valuta); ?> 
+                        value="<?= $val->kurs; ?>|||<?= $valuetmp; ?>|||<?= $val->kode; ?>"> <?= $val->kode; ?></option>
+                    <?php } ?>
+                </select>
             </div>
             <div class="form-group">
                 <label class="labelRequired" for="value">Value</label>
@@ -74,6 +97,23 @@ $data = $datas;
     </div> 
       
     
+
+<script type="text/javascript">
+    var selectedKurs = [];
+    function setValue_(kursArray){
+
+        selectedKurs = kursArray.split("|||"); 
+        console.log(selectedKurs); 
+        // arr 0 -> kurs
+        // arr 1 -> kurstmp
+
+        $("#value_").val(selectedKurs[0]);
+        $("#value_tmp_").val(selectedKurs[1]);
+        hitungValueInIdr_();
+    }
+</script>
+
+
     <script>
 
 var formatters = new Intl.NumberFormat("en-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 });
@@ -90,7 +130,7 @@ $(document).ready(function () {
         // }
         $("#qty_").val(value);
         $("#qty_tmp_").val(showValue);
-        hitungValueInIdr();
+        hitungValueInIdr_();
     });
 
     //format ribuan untuk value
@@ -118,7 +158,7 @@ $(document).ready(function () {
         let finalValue = formatValue2 + (decimalExists === true ? "," + decimal : "");
         $("#value_").val(Value.trimStart());
         $("#value_tmp_").val(finalValue.trimStart());
-        hitungValueInIdr();
+        hitungValueInIdr_();
     });
 
 });
@@ -127,7 +167,7 @@ $(document).ready(function () {
 
 
 //fungsi untuk menghitung value in IDR
-function hitungValueInIdr() {
+function hitungValueInIdr_() {
     let value = $("#value_").val();
     let qty = $("#qty_").val();
     let total = qty * value;

@@ -1,6 +1,8 @@
 <?php
 
-include 'Database.class.php';
+if (!class_exists('Database')) {
+    include 'Database.class.php'; 
+}
 
 class Kurs
 {

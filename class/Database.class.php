@@ -14,6 +14,11 @@ class Database
         $this->username = "u1555875_aldilla";
         $this->password = "SuksesBerkah2021";
         $this->db = "u1555875_aldilla";
+
+        // $this->host = "localhost";
+        // $this->username = "root";
+        // $this->password = "";
+        // $this->db = "aldilla";
     }
 
     public function getConnection()

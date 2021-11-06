@@ -1,8 +1,14 @@
 <?php
 include 'header.php';
 include '../class/Import.class.php';
+include '../class/Kurs.class.php';
 // $imports = new Import();
 // $datas = $imports->getDataImport();
+
+
+$kurs = new Kurs();
+$dataKurs = $kurs->getData();
+
 ?>
 <!-- Content Header (Page header) -->
 
@@ -156,15 +162,25 @@ include '../class/Import.class.php';
                             <input maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="qty_tmp" id="qty_tmp" class="form-control" required>
                             <input style="display:none" type="text" name="qty" id="qty" class="form-control" required>
                         </div>
+
                         <div class="form-group">
-                            <label class="labelRequired" for="valuta">Valuta</label>
-                            <input type="text" name="valuta" id="valuta" class="form-control" required>
+                            <label class="labelRequired" for="valuta">Valuta</label>  
+                            <select onchange="setValue(this.value);" class="form-control" name="valuta" id="valuta">
+                                <option value=""> -- Pilih --</option>
+                                <?php foreach ($dataKurs as $key => $val) {
+                                    $valuetmp = number_format($val->kurs,0,",",".");
+                                ?>
+                                    <option value="<?= $val->kurs; ?>|||<?= $valuetmp; ?>|||<?= $val->kode; ?>"> <?= $val->kode; ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
+
                         <div class="form-group">
                             <label class="labelRequired" for="value">Value</label>
-                            <input  onkeypress="return event.charCode == 44 || (event.charCode >= 48 && event.charCode <= 57)" type="text" name="value_tmp" id="value_tmp" class="form-control" required>
+                            <input readonly="" onkeypress="return event.charCode == 44 || (event.charCode >= 48 && event.charCode <= 57)" type="text" name="value_tmp" id="value_tmp" class="form-control" required>
                             <input style="display:none"  type="text" name="value" id="value" class="form-control" required>
                         </div>
+
                         <div class="form-group">
                             <label class="labelRequired" for="valueIdr">Value in IDR</label>
                             <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp" class="form-control" required>
@@ -219,6 +235,21 @@ include '../class/Import.class.php';
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+    var selectedKurs = [];
+    function setValue(kursArray){
+
+        selectedKurs = kursArray.split("|||"); 
+        console.log(selectedKurs); 
+        // arr 0 -> kurs
+        // arr 1 -> kurstmp
+
+        $("#value").val(selectedKurs[0]);
+        $("#value_tmp").val(selectedKurs[1]);
+        hitungValueInIdr();
+    }
+</script>
 
 <script>
     let deleteId = null;
@@ -535,7 +566,7 @@ include '../class/Import.class.php';
         var vesselName = $("#vesselName").val();
         var shipper = $("#shipper").val();
         var remark = $("#remark").val();
-        var valuta = $("#valuta").val();
+        var valuta = selectedKurs[2];
         var value = $("#value").val();
         var valueIdr = $("#valueIdr").val();
         var qty = $("#qty").val();
