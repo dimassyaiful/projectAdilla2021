@@ -17,8 +17,7 @@ class Import
 
     public function getDataImport($startDate, $endDate)
     {
-        $this->sql = "SELECT * FROM `tbl_import` where dateOfPib >= '$startDate' and dateOfPib <= '$endDate'";
-
+        $this->sql = "SELECT * FROM `tbl_import` where dateOfPib >= '$startDate' and dateOfPib <= '$endDate'"; 
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
@@ -43,10 +42,10 @@ class Import
     }
 
     public function insertDataImprot($data)
-    {
+    { 
         try {
             $this->sql = "INSERT INTO `tbl_importtemp`(`dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
-            `shipper`, `remark`, `valuta`, `value`, `valueIdr`,`qty`) VALUES (
+            `shipper`, `remark`, `valuta`, `value`, `valueIdr` ) VALUES (
                '" . $data['dateOfPib'] . "',
                '" . $data['docNo'] . "',
                '" . $data['docType'] . "',
@@ -57,8 +56,7 @@ class Import
                '" . $data['remark'] . "',
                '" . $data['valuta'] . "',
                '" . $data['value'] . "',
-               '" . $data['valueIdr'] . "',
-               '" . $data['qty'] . "'
+               '" . $data['valueIdr'] . "' 
            )";
             $this->statement = $this->conn->prepare($this->sql);
             if ($this->statement->execute()) {
@@ -100,42 +98,19 @@ class Import
     }
 
     public function saveDataImport($data)
-    {
-        try {
-            $this->sql = "SELECT * FROM `tbl_invoices` ORDER BY `id` DESC LIMIT 1";
-            $this->statement = $this->conn->prepare($this->sql);
-            if ($this->statement->execute()) {
-                $result = $this->statement->fetch(PDO::FETCH_OBJ);
-                if (is_object($result)) {
-                    $id = $result->id;
-                    $id = explode("-", $id);
-                    $id = str_pad($id[1] + 1, 8, '0', STR_PAD_LEFT);
-                    $id = "inv-" . $id;
-                } else {
-                    $id = "inv-00000001";
-                }
-                $idInvoices = $id;
-                $fromto = $data;
-                $date = date('Y-m-d');
-                $this->sql = "INSERT INTO `tbl_invoices`(`id`, `date`, `type`, `fromto`) VALUES ('" . $idInvoices . "','" . $date . "','Import','" . $fromto . "')";
+    { 
+        try {   
+                $this->sql = "INSERT INTO tbl_import( `fromto`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`shipper`,`remark`,`valuta`,`value`,`valueIdr` ) SELECT '" . $data . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,shipper,remark,valuta,`value`,`valueIdr`  FROM tbl_importtemp";
                 $this->statement = $this->conn->prepare($this->sql);
                 if ($this->statement->execute()) {
-                    $this->sql = "INSERT INTO tbl_import(`idInvoices`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`shipper`,`remark`,`valuta`,`value`,`valueIdr`,`qty`) SELECT '" . $idInvoices . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,shipper,remark,valuta,`value`,`valueIdr`,`qty` FROM tbl_importtemp";
+                    $this->sql = "DELETE FROM tbl_importtemp";
                     $this->statement = $this->conn->prepare($this->sql);
                     if ($this->statement->execute()) {
-                        $this->sql = "DELETE FROM tbl_importtemp";
-                        $this->statement = $this->conn->prepare($this->sql);
-                        if ($this->statement->execute()) {
-                            return true;
-                        }
-
-                        return false;
-                    }
+                        return true;
+                    } 
                     return false;
                 }
-                return false;
-            }
-            return false;
+                return false; 
         } catch (PDOException $e) {
             return die($e->getMessage());
         }
@@ -144,8 +119,7 @@ class Import
     public function editDataImport($data)
     {
         try {
-            $this->sql = "UPDATE tbl_import SET 
-             dateOfPib='".$data['dateOfPib']."',
+            $this->sql = "UPDATE tbl_import SET  
              docNo='".$data['docNo']."',
              docType='".$data['docType']."',
              noPengajuanDokumen='".$data['noPengajuanDokumen']."',
@@ -155,8 +129,7 @@ class Import
              remark='".$data['remark']."',
              valuta='".$data['valuta']."',
              value='".$data['value']."',
-             valueIdr='".$data['valueIdr']."',
-             qty='".$data['qty']."'
+             valueIdr='".$data['valueIdr']."' 
              where
              id='".$data['id']."'";
             $this->statement = $this->conn->prepare($this->sql);

@@ -4,18 +4,18 @@ var formatter = new Intl.NumberFormat("en-ID", { style: "currency", currency: "I
 $(document).ready(function () {
 
     //format ribuan untuk qty
-    var tmp_qty = document.getElementById('qty_tmp');
-    tmp_qty.addEventListener('keyup', function (e) {
-        let value = tmp_qty.value.replace(/[.]/gi, '');
-        let formatValue = formatter.format(value).replace(/[IDR]/gi, '').replace(/(\.+\d{2})/, '').trimLeft();
-        let showValue = formatValue.replace(/[,]/gi, '.');
-        // if(isNaN(showValue)){
-        //     showValue=0;
-        // }
-        $("#qty").val(value);
-        $("#qty_tmp").val(showValue);
-        hitungValueInIdr();
-    });
+    // var tmp_qty = document.getElementById('qty_tmp');
+    // tmp_qty.addEventListener('keyup', function (e) {
+    //     let value = tmp_qty.value.replace(/[.]/gi, '');
+    //     let formatValue = formatter.format(value).replace(/[IDR]/gi, '').replace(/(\.+\d{2})/, '').trimLeft();
+    //     let showValue = formatValue.replace(/[,]/gi, '.');
+    //     // if(isNaN(showValue)){
+    //     //     showValue=0;
+    //     // }
+    //     $("#qty").val(value);
+    //     $("#qty_tmp").val(showValue);
+    //     hitungValueInIdr();
+    // });
 
     //format ribuan untuk value
     var tmp_value = document.getElementById('value_tmp');
@@ -53,8 +53,8 @@ $(document).ready(function () {
 //fungsi untuk menghitung value in IDR
 function hitungValueInIdr() {
     let value = $("#value").val();
-    let qty = $("#qty").val();
-    let total = qty * value;
+    let kurs = $("#kurs").val();
+    let total = kurs * value;
     let finalTotal = total.toFixed(2);
 
     let arr = finalTotal.split(".");

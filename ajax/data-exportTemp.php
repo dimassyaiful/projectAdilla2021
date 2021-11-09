@@ -9,8 +9,7 @@
                 <th>BL No.</th>
                 <th>Vessel Name</th>
                 <th>Consignee</th>
-                <th>remark</th>
-                <th>Qty</th>
+                <th>remark</th> 
                 <th>Valuta</th>
                 <th>Value</th>
                 <th>Value in IDR</th>
@@ -28,8 +27,7 @@ foreach ($datas as $data):
                     <td><?=$data->blNo;?></td>
                     <td><?=$data->vesselName;?></td>
                     <td><?=$data->consignee;?></td>
-                    <td><?=$data->remark;?></td>
-                    <td><?=number_format($data->qty,0,",",".");?></td>
+                    <td><?=$data->remark;?></td> 
                     <td><?=$data->valuta;?></td>
                     <td><?=number_format($data->value, 2,",",".");?></td>
                     <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
