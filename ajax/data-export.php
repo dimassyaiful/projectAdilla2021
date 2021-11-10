@@ -9,8 +9,9 @@ foreach ($datas as $data):
     ?>
         <tr>
             <td>
-                <?=$data->idInvoices;?>
+                <?=$data->id;?>
             </td>
+            <td><?=$data->fromto;?></td>
             <td><?=$data->dateOfPib;?></td>
             <td><?=$data->docNo;?></td>
             <td><?=$data->docType;?></td>
@@ -18,9 +19,9 @@ foreach ($datas as $data):
             <td><?=$data->blNo;?></td>
             <td><?=$data->vesselName;?></td>
             <td><?=$data->consignee;?></td>
-            <td><?=$data->remark;?></td>
-            <td><?=number_format($data->qty,0,",",".");?></td>
+            <td><?=$data->remark;?></td> 
             <td><?=$data->valuta;?></td>
+            <td><?=number_format($data->kurs,0,",",".");?></td>
             <td><?=number_format($data->value, 2,",",".");?> </td>
             <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
             <td>

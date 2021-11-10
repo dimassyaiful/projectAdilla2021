@@ -45,7 +45,7 @@ class Import
     { 
         try {
             $this->sql = "INSERT INTO `tbl_importtemp`(`dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
-            `shipper`, `remark`, `valuta`, `value`, `valueIdr` ) VALUES (
+            `shipper`, `remark`, `valuta`, `kurs`, `value`, `valueIdr` ) VALUES (
                '" . $data['dateOfPib'] . "',
                '" . $data['docNo'] . "',
                '" . $data['docType'] . "',
@@ -55,6 +55,7 @@ class Import
                '" . $data['shipper'] . "',
                '" . $data['remark'] . "',
                '" . $data['valuta'] . "',
+               '" . $data['kurs'] . "',
                '" . $data['value'] . "',
                '" . $data['valueIdr'] . "' 
            )";
@@ -100,7 +101,7 @@ class Import
     public function saveDataImport($data)
     { 
         try {   
-                $this->sql = "INSERT INTO tbl_import( `fromto`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`shipper`,`remark`,`valuta`,`value`,`valueIdr` ) SELECT '" . $data . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,shipper,remark,valuta,`value`,`valueIdr`  FROM tbl_importtemp";
+                $this->sql = "INSERT INTO tbl_import( `fromto`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`shipper`,`remark`,`valuta`,`value`,`valueIdr`,`kurs` ) SELECT '" . $data . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,shipper,remark,valuta,`value`,`valueIdr`,`kurs`  FROM tbl_importtemp";
                 $this->statement = $this->conn->prepare($this->sql);
                 if ($this->statement->execute()) {
                     $this->sql = "DELETE FROM tbl_importtemp";
@@ -121,6 +122,7 @@ class Import
         try {
             $this->sql = "UPDATE tbl_import SET  
              docNo='".$data['docNo']."',
+             fromto='".$data['fromto']."',
              docType='".$data['docType']."',
              noPengajuanDokumen='".$data['noPengajuanDokumen']."',
              blNo='".$data['blNo']."',
@@ -128,6 +130,7 @@ class Import
              shipper='".$data['shipper']."',
              remark='".$data['remark']."',
              valuta='".$data['valuta']."',
+             kurs='".$data['kurs']."',
              value='".$data['value']."',
              valueIdr='".$data['valueIdr']."' 
              where

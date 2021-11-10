@@ -28,10 +28,16 @@ function dropdownKursSelected($val1,$val2,$value,$valueIdr){
     ?>
     
     <div class="row">
-        <div class="col-md-12"> 
+        <div class="col-md-6"> 
             <div class="form-group">
                 <label class="labelRequired" for="dateOfPib">ID</label> 
                 <input readonly="" value="<?=$data->id;?>"  name="id" class=" form-control" readonly required>
+            </div>
+        </div>
+        <div class="col-md-6"> 
+            <div class="form-group">
+                <label class="labelRequired"  >From To</label> 
+                <input  value="<?=$data->fromto;?>"  name="fromto" class=" form-control"  required>
             </div>
         </div>
     </div>
@@ -81,12 +87,9 @@ function dropdownKursSelected($val1,$val2,$value,$valueIdr){
                                     <option <?php  
 
                                     $checked = dropdownKursSelected($val->kode,$data->valuta,$data->value,$data->valueIdr);
-                        if($checked){ 
-                            $kursPrice =    (double)$data->valueIdr / (double)$data->value;
-                            $kursPriceDecimal = number_format($kursPrice, 0,',','.');
-                            echo "selected";
-                        }
-
+                                    if($checked){  
+                                        echo "selected";
+                                    } 
                                     ?> value="<?= $val->kurs; ?>|||<?= $valuetmp; ?>|||<?= $val->kode; ?>"> <?= $val->kode; ?></option>
                                 <?php } ?>
                             </select>
@@ -95,8 +98,8 @@ function dropdownKursSelected($val1,$val2,$value,$valueIdr){
 
                         <div class="form-group">
                             <label class="labelRequired" for="kurs">Kurs</label>
-                            <input value="<?= $kursPriceDecimal; ?>" required required readonly="" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="kurs_tmp" id="kurs_tmp_" class="form-control" >
-                            <input  value="<?= $kursPrice; ?>"  style="display:none" type="text" name="kurs" id="kurs_" class="form-control" >
+                            <input value="<?= number_format($data->kurs, 0,',','.'); ?>" required required readonly="" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="kurs_tmp" id="kurs_tmp_" class="form-control" >
+                            <input  value="<?= $data->kurs; ?>"  style="display:none" type="text" name="kurs" id="kurs_" class="form-control" >
                         </div>
 
                         <div class="form-group">

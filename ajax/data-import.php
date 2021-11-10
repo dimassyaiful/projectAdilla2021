@@ -18,7 +18,8 @@ foreach ($datas as $data):
             <td><?=$data->vesselName;?></td>
             <td><?=$data->shipper;?></td>
             <td><?=$data->remark;?></td> 
-            <td><?=$data->valuta;?></td>
+            <td><?=$data->valuta;?></td> 
+            <td><?=number_format($data->kurs, 0,",",".");?> </td>
             <td><?=number_format($data->value, 2,",",".");?> </td>
             <td>Rp. <?= number_format($data->valueIdr, 2,",",".");?></td>
             <td>

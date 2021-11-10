@@ -63,7 +63,8 @@ $dataKurs = $kurs->getData();
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Invoice Number</th>
+                                        <th>ID</th>
+                                        <th>From To</th>
                                         <th>Date of Peb</th>
                                         <th>Doc No.</th>
                                         <th>Doc Type</th>
@@ -72,8 +73,8 @@ $dataKurs = $kurs->getData();
                                         <th>Vessel Name</th>
                                         <th>Consignee</th>
                                         <th>remark</th>
-                                        <th>Qty</th>
                                         <th>Valuta</th>
+                                        <th>Kurs</th>
                                         <th>Value</th>
                                         <th>Value in IDR</th>
                                         <th>Action</th>
@@ -84,7 +85,7 @@ $dataKurs = $kurs->getData();
                                 </tbody>
                                 <tfoot style="display: none;">
                                 <tr>
-                                    <th colspan=11> </th>  
+                                    <th colspan=12> </th>  
                                     <th align="right"> Total: </th> 
                                     <th class="totalValue"> </th>  
                                 </tr>
@@ -148,14 +149,8 @@ $dataKurs = $kurs->getData();
                             <input type="text" name="remark" id="remark" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="labelRequired" for="qty">QTY</label>
-                            <input maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="qty_tmp" id="qty_tmp" class="form-control" required>
-                            <input style="display:none" type="text" name="qty" id="qty" class="form-control" required>
-                        </div>
-
-                        <div class="form-group">
                             <label class="labelRequired" for="valuta">Valuta</label>  
-                            <select onchange="setValue(this.value);" class="form-control" name="valuta" id="valuta">
+                            <select required="" onchange="setValue(this.value);" class="form-control" name="valuta" id="valuta">
                                 <option value=""> -- Pilih --</option>
                                 <?php foreach ($dataKurs as $key => $val) {
                                     $valuetmp = number_format($val->kurs,0,",",".");
@@ -165,16 +160,26 @@ $dataKurs = $kurs->getData();
                             </select>
                         </div>
 
+
+                        <div class="form-group">
+                            <label class="labelRequired" for="kurs">Kurs</label>
+                            <input required required readonly="" maxlength="14" onkeypress="return event.charCode >= 48 && event.charCode <= 57" type="text" name="kurs_tmp" id="kurs_tmp" class="form-control" >
+                            <input style="display:none" type="text" name="kurs" id="kurs" class="form-control" >
+                        </div>
+
                         <div class="form-group">
                             <label class="labelRequired" for="value">Value</label>
-                            <input readonly="" onkeypress="return event.charCode == 44 || (event.charCode >= 48 && event.charCode <= 57)" type="text" name="value_tmp" id="value_tmp" class="form-control" required>
-                            <input style="display:none"  type="text" name="value" id="value" class="form-control" required>
+                            <input    onkeypress="return event.charCode == 44 || (event.charCode >= 48 && event.charCode <= 57)" type="text" name="value_tmp" id="value_tmp" class="form-control" required>
+                            <input style="display:none"  type="text" name="value" id="value" class="form-control"  >
                         </div>
+
                         <div class="form-group">
                             <label class="labelRequired" for="valueIdr">Value in IDR</label>
                             <input style="background-color: #dcffdb" readonly type="text" name="valueIdr_tmp" id="valueIdr_tmp" class="form-control" required>
                             <input style="display:none" type="text" value="0" readonly name="valueIdr" id="valueIdr" class="form-control">
                         </div>
+
+
                     </div>
 
                     <div class="col-md-12">
@@ -241,10 +246,9 @@ $dataKurs = $kurs->getData();
         selectedKurs = kursArray.split("|||"); 
         console.log(selectedKurs); 
         // arr 0 -> kurs
-        // arr 1 -> kurstmp
-
-        $("#value").val(selectedKurs[0]);
-        $("#value_tmp").val(selectedKurs[1]);
+        // arr 1 -> kurstmp 
+        $("#kurs").val(selectedKurs[0]);
+        $("#kurs_tmp").val(selectedKurs[1]);
         hitungValueInIdr();
     }
 </script>
@@ -339,8 +343,8 @@ $dataKurs = $kurs->getData();
                 type: "POST",
                 
                 dataType: "html",
-                url: "../process/export.process.php",
-                data: sendData+"&type=editExport", 
+                url: "../process/export.process.php", 
+                data: sendData+"&valuta="+valuta_+"&type=editExport", 
                 success: function(data){
                     if(data=="successEdit"){
                         $("#saveEdit").css('display','none');
@@ -461,20 +465,20 @@ $dataKurs = $kurs->getData();
                 {
                     extend: 'copy',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     } , footer: true
                 },
                 {
                     extend: 'excel',
                     title: function () { return `Data Export Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true
                 },
                 {
@@ -483,12 +487,13 @@ $dataKurs = $kurs->getData();
                     pageSize: 'legal',
                     title: function () { return `Data Export \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, 
                     footer: true, 
                     customize : function(doc) {
                         console.log(doc);
                         doc.content[1].table.widths = [ 
+                            'auto',   
                             'auto',   
                             'auto',   
                             'auto',   
@@ -511,7 +516,7 @@ $dataKurs = $kurs->getData();
                     pageSize: 'LEGAL',
                     title: function () { return `Data Export \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true
                 }
             ]
@@ -560,9 +565,9 @@ $dataKurs = $kurs->getData();
         var consignee = $("#consignee").val();
         var remark = $("#remark").val();
         var valuta = selectedKurs[2];
+        var kurs = selectedKurs[0];
         var value = $("#value").val();
-        var valueIdr = $("#valueIdr").val();
-        var qty = $("#qty").val();
+        var valueIdr = $("#valueIdr").val(); 
         $.ajax({
             type: "POST",
             dataType: "html",
@@ -580,7 +585,7 @@ $dataKurs = $kurs->getData();
                 valuta: valuta,
                 value: value,
                 valueIdr: valueIdr,
-                qty: qty
+                kurs: kurs
             },
             success: function(response) {
                 if (response == 'successAdd') {

@@ -51,8 +51,8 @@ class Export
     public function insertDataExprot($data)
     {
         try {
-            $this->sql = "INSERT INTO `tbl_exporttemp`(`dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
-            `consignee`, `remark`, `valuta`, `value`, `valueIdr`,`qty`) VALUES (
+            $this->sql = "INSERT INTO `tbl_exporttemp`( `dateOfPib`, `docNo`, `docType`, `noPengajuanDokumen`, `blNo`, `vesselName`,
+            `consignee`, `remark`, `valuta`, `kurs`, `value`, `valueIdr` ) VALUES (
                '" . $data['dateOfPib'] . "',
                '" . $data['docNo'] . "',
                '" . $data['docType'] . "',
@@ -62,9 +62,9 @@ class Export
                '" . $data['consignee'] . "',
                '" . $data['remark'] . "',
                '" . $data['valuta'] . "',
+               '" . $data['kurs'] . "',
                '" . $data['value'] . "',
-               '" . $data['valueIdr'] . "',
-               '" . $data['qty'] . "'
+               '" . $data['valueIdr'] . "' 
            )";
             $this->statement = $this->conn->prepare($this->sql);
             if ($this->statement->execute()) {
@@ -91,41 +91,19 @@ class Export
 
     public function saveDataExport($data)
     {
-        try {
-            $this->sql = "SELECT * FROM `tbl_invoices` ORDER BY `id` DESC LIMIT 1";
+        try {  
+            $this->sql = "INSERT INTO tbl_export(`fromto`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`consignee`,`remark`,`valuta`,`kurs`,`value`,`valueIdr` ) SELECT '" . $data . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,consignee,remark,valuta,`kurs`,`value`,`valueIdr`  FROM tbl_exporttemp";
             $this->statement = $this->conn->prepare($this->sql);
             if ($this->statement->execute()) {
-                $result = $this->statement->fetch(PDO::FETCH_OBJ);
-                if (is_object($result)) {
-                    $id = $result->id;
-                    $id = explode("-", $id);
-                    $id = str_pad($id[1] + 1, 8, '0', STR_PAD_LEFT);
-                    $id = "inv-" . $id;
-                } else {
-                    $id = "inv-00000001";
-                }
-                $idInvoices = $id;
-                $fromto = $data;
-                $date = date('Y-m-d');
-                $this->sql = "INSERT INTO `tbl_invoices`(`id`, `date`, `type`, `fromto`) VALUES ('" . $idInvoices . "','" . $date . "','Export','" . $fromto . "')";
+                $this->sql = "DELETE FROM tbl_exporttemp";
                 $this->statement = $this->conn->prepare($this->sql);
                 if ($this->statement->execute()) {
-                    $this->sql = "INSERT INTO tbl_export(`idInvoices`,`dateOfPib`,`docNo`,`docType`,`noPengajuanDokumen`,`blNo`,`vesselName`,`consignee`,`remark`,`valuta`,`value`,`valueIdr`,`qty`) SELECT '" . $idInvoices . "',dateOfPib,docNo,docType,noPengajuanDokumen,blNo,vesselName,consignee,remark,valuta,`value`,`valueIdr`,`qty` FROM tbl_exporttemp";
-                    $this->statement = $this->conn->prepare($this->sql);
-                    if ($this->statement->execute()) {
-                        $this->sql = "DELETE FROM tbl_exporttemp";
-                        $this->statement = $this->conn->prepare($this->sql);
-                        if ($this->statement->execute()) {
-                            return true;
-                        }
-
-                        return false;
-                    }
-                    return false;
+                    return true;
                 }
+
                 return false;
-            }
-            return false;
+            } 
+        return false; 
         } catch (PDOException $e) {
             return die($e->getMessage());
         }
@@ -143,6 +121,7 @@ class Export
     {
         try {
             $this->sql = "UPDATE tbl_export SET 
+             fromto='".$data['fromto']."',
              dateOfPib='".$data['dateOfPib']."',
              docNo='".$data['docNo']."',
              docType='".$data['docType']."',
@@ -152,9 +131,9 @@ class Export
              consignee='".$data['consignee']."',
              remark='".$data['remark']."',
              valuta='".$data['valuta']."',
+             kurs='".$data['kurs']."',
              value='".$data['value']."',
-             valueIdr='".$data['valueIdr']."',
-             qty='".$data['qty']."'
+             valueIdr='".$data['valueIdr']."' 
              where
              id='".$data['id']."'";
             $this->statement = $this->conn->prepare($this->sql);

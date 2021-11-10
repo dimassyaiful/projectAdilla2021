@@ -79,6 +79,7 @@ $dataKurs = $kurs->getData();
                                         <th>Shipper</th>
                                         <th>remark</th> 
                                         <th>Valuta</th>
+                                        <th>Kurs</th>
                                         <th style="min-width: 150px">Value</th>
                                         <th style="min-width: 150px">Value in IDR   </th>
                                         <th>Action</th>
@@ -89,7 +90,7 @@ $dataKurs = $kurs->getData();
                                 </tbody>
                                 <tfoot style="display: none;">
                                 <tr>
-                                    <th colspan=11> </th>  
+                                    <th colspan=12> </th>  
                                     <th align="right"> Total: </th> 
                                     <th class="totalValue"> </th>  
                                 </tr>
@@ -466,14 +467,14 @@ $dataKurs = $kurs->getData();
                 {
                     extend: 'copy',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true,
                     title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                 },
                 {
                     extend: 'csv',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     } , footer: true,
                     title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                 },
@@ -481,7 +482,7 @@ $dataKurs = $kurs->getData();
                     extend: 'excel',
                     title: function () { return `Data Import Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true
                 },
                 {
@@ -490,12 +491,13 @@ $dataKurs = $kurs->getData();
                     pageSize: 'legal',
                     title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, 
                     footer: true, 
                     customize : function(doc) {
                         console.log(doc);
                         doc.content[1].table.widths = [ 
+                            'auto',   
                             'auto',   
                             'auto',   
                             'auto',   
@@ -518,7 +520,7 @@ $dataKurs = $kurs->getData();
                     pageSize: 'LEGAL',
                     title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
                     }, footer: true
                 }
             ]
@@ -573,6 +575,7 @@ $dataKurs = $kurs->getData();
         var valuta = selectedKurs[2];
         var value = $("#value").val();
         var valueIdr = $("#valueIdr").val(); 
+        var kurs = $("#kurs").val(); 
         var qty = 0; 
         $.ajax({
             type: "POST",
@@ -591,6 +594,7 @@ $dataKurs = $kurs->getData();
                 valuta: valuta,
                 value: value,
                 valueIdr: valueIdr ,
+                kurs: kurs ,
                 qty: qty 
             },
             success: function(response) {

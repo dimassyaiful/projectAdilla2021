@@ -244,10 +244,14 @@ $datas = $export->getData();
 
     }); 
   
-
+ 
   function modalAdd(){
         $("#modalTitle").html("Tambah Data Kurs");
         actionType = "insertData";
+        $("#kode").val("");
+        $("#kode").removeAttr("readonly");
+        $("#value").val('');
+        $("#value_tmp ").val("");
         $("#modalAdd").modal('show');
   }
 

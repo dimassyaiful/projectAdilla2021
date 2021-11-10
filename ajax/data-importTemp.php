@@ -12,6 +12,7 @@
                 <th>remark</th>
                 <th>Qty</th>
                 <th>Valuta</th>
+                <th>Kurs</th>
                 <th>Value</th>
                 <th>Value in IDR</th>
             </tr>
@@ -31,6 +32,7 @@ foreach ($datas as $data):
                     <td><?=$data->remark;?></td>
                     <td><?=number_format($data->qty,0,",",".");?></td>
                     <td><?=$data->valuta;?></td>
+                    <td><?=number_format($data->kurs,0,",",".");?></td>
                     <td><?=number_format($data->value, 2,",",".");?></td>
                     <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
                 </tr>
