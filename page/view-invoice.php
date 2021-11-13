@@ -192,7 +192,7 @@ include '../class/Invoice.class.php';
     async function openFormAdd(){
 
         $("#modallAddLabel").html("Add Data Invoice");
-        $("#divAdd").html("<center> Prepare your form </center>");
+        $("#divAdd").html("<div class='text-center p-3'> <i class='fa fa-spin fa-spinner fa-2x'></i> </div>");
         $("#modalAdd").modal("show");
         return await $.ajax({
             type: "POST",
@@ -209,7 +209,7 @@ include '../class/Invoice.class.php';
 
     async function openFormDetail(id){
         $("#modallAddLabel").html("Detail Data Invoice | "+id);
-        $("#divAdd").html("<center> Mengambil Data </center>");
+        $("#divAdd").html("<div class='text-center p-3'> <i class='fa fa-spin fa-spinner fa-2x'></i> </div>");
         $("#modalAdd").modal("show");
         return await $.ajax({
             type: "POST",
