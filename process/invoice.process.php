@@ -3,17 +3,39 @@
 include '../class/Invoice.class.php';
 
 $invoice = new Invoice();
-if (isset($_POST['posttype'])) {
-    $data = $invoice->addInvoice($_POST);
-    include '../ajax/add-invoices.php';
-} elseif (isset($_POST['typeInsert'])) {
-    if ($_POST['typeInsert'] == 'Import') {
-        $datas = $invoice->addImport($_POST);
-    } elseif ($_POST['typeInsert'] == 'Export') {
-        $datas = $invoice->addExport($_POST);
+
+if (isset($_POST)) {
+    
+    if ($_POST['type'] == 'data') { 
+        include '../ajax/data-invoicesTables.php';
+    }else if ($_POST['type'] == 'dataDetails') {
+        $status = $invoice->getDetailInvoice($_POST);
+        if ($status) {
+            echo "success";
+        } else {
+            echo var_dump($status);
+        }
+    }else if ($_POST['type'] == 'add') {
+        $status = $invoice->addInvoice($_POST);
+        if ($status) {
+            echo "success";
+        } else {
+            echo var_dump($status);
+        }
+    }else if ($_POST['type'] == 'edit') {
+        $status = $invoice->updateInvoice($_POST);
+        if ($status) {
+            echo "success";
+        } else {
+            echo var_dump($status);
+        }
+    }else if ($_POST['type'] == 'delete') {
+        $status = $invoice->deleteInvoice($_POST);
+        if ($status) {
+            echo "success";
+        } else {
+            echo var_dump($status);
+        }
     }
-    include '../ajax/data-invoices.php';
-} elseif (isset($_POST['detialInvoice'])) {
-    $datas = $invoice->getDetailInvoice($_POST);
-    include '../modal/detail-invoices.php';
+ 
 }

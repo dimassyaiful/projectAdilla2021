@@ -156,38 +156,18 @@ function terbilang($nilai) {
 if (isset($_GET)) {
     if ($_GET['id'] != '' || $_GET['id'] != null) {
         require '../plugins/html2pdf/autoload.php';
-        $id = $_GET['id']; 
-        $host = "intonasikopi.com";
-        $username = "u1555875_aldilla";
-        $password = "SuksesBerkah2021";
-        $db = "u1555875_aldilla";
-        try {
-            $conn = new PDO("mysql:host=$host;dbname=$db", $username, $password);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sql = "SELECT * FROM tbl_invoices WHERE id = '" . $id . "'";
-            $statement = $conn->prepare($sql);
-            if (!$statement->execute()) {
-                die('Something Wrong');
-            }
+        include '../class/Invoice.class.php';
+        $invoices = new Invoice();
+        $datas = $invoices->getDetailInvoice($_GET);   
+        $details = $datas['details']; 
+        $items = $datas['items']; 
 
-            $res = $statement->fetchObject();
-            $type = $res->type;
+        try { 
 
-            $old_date = $res->date;
-            $old_date_timestamp = strtotime($old_date);
+            $old_date_timestamp = strtotime($details->date);
             $new_date = date('d F Y', $old_date_timestamp);
-
-            if ($type == 'Import') {
-                $sql = "SELECT * FROM `tbl_import` WHERE idInvoices = '" . $id . "'";
-            } elseif ($type == 'Export') {
-                $sql = "SELECT * FROM `tbl_export` WHERE idInvoices = '" . $id . "'";
-            }
-            $statement = $conn->prepare($sql);
-            if (!$statement->execute()) {
-                die('something wrong');
-            }
+   
 
             $html = '<table width="100%">
             <tr>
@@ -198,9 +178,9 @@ if (isset($_GET)) {
               </td>
             </tr>
             <tr>
-              <td width="75%" rowspan="3" style="vertical-align: text-top">BIL TO : '.$res->fromto.'</td>
+              <td width="75%" rowspan="3" style="vertical-align: text-top">BIL TO : '.$details->fromto.'</td>
               <td>INV</td>
-              <td>: ' . $res->id . '</td>
+              <td>: ' . $details->id . '</td>
             </tr>
             <tr>
               <td>DATE</td>
@@ -214,34 +194,94 @@ if (isset($_GET)) {
                   <th>QTY</th>
                   <th>Unit Price</th>
                   <th>Amount (IDR)</th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td style="font-weight: bold">'.$type.'</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
                 </tr>';
             $no = 1;
             $totalQty = 0;
             $totalValue = 0;
             $totalValueIdr = 0;
-            while ($result = $statement->fetchObject()):
-              
-                $totalQty = $totalQty+$result->qty ;
-                $totalValue = $totalValue+$result->value;
-                $totalValueIdr = $totalValueIdr+$result->valueIdr;
 
-                $html .= '
-	                <tr>
-	                    <td>' . $no++ . '</td>
-	                    <td>' . $result->vesselName . '</td>
-	                    <td style="text-align: right; padding-right: 20px;">' . number_format($result->qty,0,",",".") . '</td>
-	                    <td style="text-align: right; padding-right: 20px;">'.$result->valuta . ' '.number_format($result->value , 2,",",".") . '</td>
-	                    <td style="text-align: right; padding-right: 20px;"> IDR ' . number_format($result->valueIdr  , 2,",","."). '</td>
-	                </tr>
-	                ';
-            endwhile;
+            // pisahkan data import export
+            $htmlimportTmp = "";
+            $htmlexportTmp = "";
+            $countImport = 0;
+            $countExport = 0;
+            foreach ($items as $key => $val) { 
+              $totalValueIdr = $totalValueIdr+ $val->amount; 
+              $totalQty = $totalQty+ $val->qty; 
+              if($val->type == "import"){
+                $htmlimportTmp .= "<tr>
+                      <td align='center'>$no</td> 
+                      <td>".$val->description."</td> 
+                      <td align='center'>".$val->qty_tmp."</td> 
+                      <td align='right'>
+                        <table  style='width: 100%;'>
+                          <tr>
+                            <td>IDR</td>
+                            <td align='right'>".$val->unit_price_tmp."</td>
+                          </tr> 
+                        </table> 
+                      </td>  
+
+                      <td align='right'>
+                        <table  style='width: 100%;'>
+                          <tr>
+                            <td>IDR</td>
+                            <td align='right'>".$val->amount_tmp."</td>
+                          </tr> 
+                        </table> 
+                      </td>  
+                  </tr>";
+                  $countImport++;  
+              }else{ 
+                $htmlexportTmp .= "<tr>
+                      <td align='center'>$no</td> 
+                      <td>".$val->description."</td> 
+                      <td align='center'>".$val->qty_tmp."</td> 
+                      <td align='right'>
+                        <table  style='width: 100%;'>
+                          <tr>
+                            <td>IDR</td>
+                            <td align='right'>".$val->unit_price_tmp."</td>
+                          </tr> 
+                        </table> 
+                      </td>  
+
+                      <td align='right'>
+                        <table  style='width: 100%;'>
+                          <tr>
+                            <td>IDR</td>
+                            <td align='right'>".$val->amount_tmp."</td>
+                          </tr> 
+                        </table> 
+                      </td>  
+                  </tr>";
+                  $countExport++;   
+              }
+              $no++;
+            }
+
+            //set html import
+            $htmlImport = "";
+            if($countImport > 0){
+              $htmlImport = "<tr> 
+                  <td></td>  
+                  <td colspan=5 style=' font-weight: bold;'> Import </td>  
+              </tr>"; 
+              $htmlImport .= $htmlimportTmp;
+            }
+
+            //set html import
+            $htmlExport = "";
+            if($countExport > 0){
+              $htmlExport = "<tr>
+                  <td></td>  
+                  <td colspan=5 style=' font-weight: bold;'> Export </td>  
+              </tr>"; 
+              $htmlExport .= $htmlexportTmp;
+            }
+            
+            $html .= $htmlImport;
+            $html .= $htmlExport;
             
             $terbilang = terbilang($totalValueIdr);
             $say =  CurencyLang::toEnglish($totalValueIdr) ;
@@ -249,9 +289,18 @@ if (isset($_GET)) {
             $html .= ' 
                 <tr> 
                 <td colspan=2 style="font-weight: bold; text-align:right; padding-right: 20px;">TOTAL</td>
-                <td style="text-align: right;font-weight: bold; padding-right: 20px;">'.number_format($totalQty,0,",",".").'</td>
+                <td style="text-align: center;font-weight: bold;">'.number_format($totalQty,0,",",".").'</td>
                 <td style="text-align: right;font-weight: bold; padding-right: 20px;">  </td>
-                <td style="text-align: right;font-weight: bold; padding-right: 20px;">IDR '.number_format($totalValueIdr  , 2,",",".").'</td>
+                
+
+                      <td align="right">
+                        <table style="width: 100%;">
+                          <tr>
+                            <td style="font-weight: bold;">IDR</td>
+                            <td align="right" style="font-weight: bold;"> '.number_format($totalValueIdr  , 2,",",".").'</td>
+                          </tr> 
+                        </table> 
+                      </td> 
               </tr> 
               </table> 
 

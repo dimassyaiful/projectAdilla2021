@@ -16,7 +16,7 @@ class Invoice
 
     public function getDataInvoice($startDate, $endDate)
     {
-        $this->sql = "SELECT * FROM view_invoices where date >= '$startDate' and date <= '$endDate'";
+        $this->sql = "SELECT * FROM tbl_invoices where date >= '$startDate' and date <= '$endDate'";
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
         $datas = array();
@@ -28,162 +28,159 @@ class Invoice
 
     public function getDetailInvoice($data)
     {
-        $type = $data['type'];
-        if ($type == 'Import') {
-            $this->sql = "SELECT * FROM tbl_import WHERE idInvoices = '" . $data['id'] . "'";
-        } elseif ($type == 'Export') {
-            $this->sql = "SELECT * FROM tbl_export WHERE idInvoices = '" . $data['id'] . "'";
-        }
+        // Get Data Invoice
+        $this->sql = "SELECT * FROM tbl_invoices WHERE id = '" . $data['id'] . "'";
         $this->statement = $this->conn->prepare($this->sql);
         $this->statement->execute();
-        $datas = array();
+        $datas['details'] = $this->statement->fetch(PDO::FETCH_OBJ);
+
+        // Get Data Invoice
+        $this->sql = "SELECT * FROM tbl_invoice_items WHERE id_invoice = '" . $data['id'] . "' order by type desc";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+
         while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
-            $datas[] = $result;
-        endwhile;
+            $result->qty_tmp = number_format($result->qty,0,",",".");
+            $result->unit_price_tmp = number_format($result->unit_price,0,",",".");
+            $result->amount_tmp = number_format($result->amount,0,",",".");
+
+            $import = "";
+            $export = "";
+            if($result->type == "import"){
+                $import = "selected";
+            }else{
+                $export = "selected"; 
+            }
+            $result->import = $import;
+            $result->export = $export;
+
+            $datas['items'][] = $result; 
+        endwhile; 
+ 
         return $datas;
     }
 
     public function addInvoice($data)
-    {
-        try {
-            $this->sql = "SELECT `id` from tbl_invoices ORDER BY `id` DESC LIMIT 1";
-            $this->statement = $this->conn->prepare($this->sql);
-            $this->statement->execute();
-            $result = $this->statement->fetch(PDO::FETCH_OBJ);
-            if (is_object($result)) {
-                $id = $result->id;
-                $id = explode("-", $id);
-                $id = str_pad(intval($id[1]) + 1, 8, '0', STR_PAD_LEFT);
-                $id = "inv-" . $id;
-                $this->sql = "INSERT INTO tbl_invoices(`id`,`date`,`type`,`fromto`) VALUES('" . $id . "','" . $data['date'] . "','" . $data['type'] . "','" . $data['fromto'] . "')";
-                $this->statement = $this->conn->prepare($this->sql);
-                if ($this->statement->execute()) {
-                    $datares['id'] = $id;
-                    $datares['type'] = $data['type'];
-                    return $datares;
-                } else {
-                    return false;
-                }
-            } else {
-                $id = "inv-00000001";
-                $this->sql = "INSERT INTO tbl_invoices(`id`,`date`,`type`,`fromto`) VALUES('" . $id . "','" . $data['date'] . "','" . $data['type'] . "','" . $data['fromto'] . "')";
-                $this->statement = $this->conn->prepare($this->sql);
-                if ($this->statement->execute()) {
-                    $datares['id'] = $id;
-                    $datares['type'] = $data['type'];
-                    return $datares;
-                } else {
-                    return false;
-                }
-            }
-        } catch (PDOException $e) {
-            return $e->getMessage();
-        }
-    }
+    {     
 
-    public function addImport($data)
-    {
-        try {
-            $this->sql = "INSERT INTO `tbl_import`(
-                `idInvoices`,
-                 `dateOfPib`,
-                 `docNo`,
-                 `docType`,
-                 `noPengajuanDokumen`,
-                 `blNo`,
-                 `vesselName`,
-                 `shipper`,
-                 `remark`,
-                 `valuta`,
-                 `value`,
-                 `valueIdr`,
-                 `qty`
-                 ) VALUES (
-                    '" . $data['invoiceId'] . "',
-                    '" . $data['dateOfPib'] . "',
-                    '" . $data['docNo'] . "',
-                    '" . $data['docType'] . "',
-                    '" . $data['noPengajuanDokumen'] . "',
-                    '" . $data['blNo'] . "',
-                    '" . $data['vesselName'] . "',
-                    '" . $data['shipper'] . "',
-                    '" . $data['remark'] . "',
-                    '" . $data['valuta'] . "',
-                    '" . $data['valueInp'] . "',
-                    '" . $data['valueIdr'] . "',
-                    '" . $data['qty'] . "'
-                )";
-            $this->statement = $this->conn->prepare($this->sql);
-            if ($this->statement->execute()) {
-                $this->sql = "SELECT * FROM tbl_import WHERE idInvoices = '" . $data['invoiceId'] . "'";
-                $this->statement = $this->conn->prepare($this->sql);
-                if ($this->statement->execute()) {
-                    $datas = array();
-                    while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
-                        $datas[] = $result;
-                    endwhile;
-                    return $datas;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return $e->getMessage();
-        }
-    }
+        // get invoice numbers 
+        // format number : INV-00001
+        $length = 5;
+        $char = 0;
+        $type = 'd';
+        $format = "%{$char}{$length}{$type}"; 
 
-    public function addExport($data)
-    {
-        try {
-            $this->sql = "INSERT INTO `tbl_export`(
-                `idInvoices`,
-                 `dateOfPib`,
-                 `docNo`,
-                 `docType`,
-                 `noPengajuanDokumen`,
-                 `blNo`,
-                 `vesselName`,
-                 `consignee`,
-                 `remark`,
-                 `valuta`,
-                 `value`,
-                 `valueIdr`,
-                 `qty`
-                 ) VALUES (
-                    '" . $data['invoiceId'] . "',
-                    '" . $data['dateOfPib'] . "',
-                    '" . $data['docNo'] . "',
-                    '" . $data['docType'] . "',
-                    '" . $data['noPengajuanDokumen'] . "',
-                    '" . $data['blNo'] . "',
-                    '" . $data['vesselName'] . "',
-                    '" . $data['consignee'] . "',
-                    '" . $data['remark'] . "',
-                    '" . $data['valuta'] . "',
-                    '" . $data['valueInp'] . "',
-                    '" . $data['valueIdr'] . "',
-                    '" . $data['qty'] . "'
-                )";
-            $this->statement = $this->conn->prepare($this->sql);
-            if ($this->statement->execute()) {
-                $this->sql = "SELECT * FROM tbl_export WHERE idInvoices = '" . $data['invoiceId'] . "'";
-                $this->statement = $this->conn->prepare($this->sql);
-                if ($this->statement->execute()) {
-                    $datas = array();
-                    while ($result = $this->statement->fetch(PDO::FETCH_OBJ)) :
-                        $datas[] = $result;
-                    endwhile;
-                    return $datas;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return $e->getMessage();
+        
+
+        $this->sql = "SELECT max(id) as id FROM tbl_invoices order by id desc";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+        $lastData =  $this->statement->fetch(PDO::FETCH_OBJ); 
+
+        if(empty($lastData)){
+            $id_invoice = "INV-".sprintf($format, 1); 
+        }else{
+            $a = $lastData->id;
+            $b = ltrim($a,"INV-");
+            $c = (int)$b;
+            $id_invoice = "INV-".sprintf($format, $c+1);  
+        } 
+
+        //add invoice
+        $this->sql = "INSERT INTO tbl_invoices(`id`,`date`,`fromto`) VALUES('" . $id_invoice . "','" . $data['date'] . "','" . $data['fromto'] . "')"; 
+        $this->statement = $this->conn->prepare($this->sql);
+        if (!$this->statement->execute()) {  
+            return "Gagal menambah data invoices";
+        } 
+
+
+        //add items 
+        if(empty($data['itemType'])){ 
+            return "Items tidak boleh kosong"; 
         }
+ 
+        $count_arr  = count($data['itemType']);
+        $this->sql = "";
+        for ($i=0; $i < $count_arr; $i++) { 
+
+             $this->sql .= "INSERT INTO tbl_invoice_items(
+                `id_invoice`,
+                `type`,
+                `description`,
+                `qty`,
+                `unit_price`,
+                `amount`
+            ) VALUES( 
+            '" . $id_invoice . "',
+            '" . $data['itemType'][$i] . "',
+            '" . $data['description'][$i] . "',
+            '" . $data['qty'][$i] . "',
+            '" . $data['unit_price'][$i] . "',
+            '" . $data['amount_price'][$i] . "' 
+            ); "; 
+        }
+
+            $this->statement = $this->conn->prepare($this->sql);  
+            if (!$this->statement->execute()) {  
+                return "Gagal memasukan items ke ".($i+1);
+            }   
+  
+        return true; 
     }
+    
+    public function updateInvoice($data)
+    {    
+        //add invoice
+        $this->sql = "UPDATE tbl_invoices set  `date`='" . $data['date'] . "',fromto='" . $data['fromto'] . "' WHERE id='" . $data['id'] . "'";
+        $this->statement = $this->conn->prepare($this->sql);
+        if (!$this->statement->execute()) { 
+            $this->conn->rollBack();
+            return "Gagal mengubah data invoices";
+        } 
+ 
+        //add items
+        if(empty($data['itemType'])){ 
+            return "Items tidak boleh kosong"; 
+        }
+
+
+        $this->sql = "DELETE from tbl_invoice_items where id_invoice='" . $data['id'] . "'";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute();
+
+        $id_invoice = $data['id'];
+        $count_arr  = count($data['itemType']);
+        for ($i=0; $i < $count_arr; $i++) {  
+             $this->sql = "INSERT INTO tbl_invoice_items(
+                `id_invoice`,
+                `type`,
+                `description`,
+                `qty`,
+                `unit_price`,
+                `amount`
+            ) VALUES( 
+            '" . $id_invoice . "',
+            '" . $data['itemType'][$i] . "',
+            '" . $data['description'][$i] . "',
+            '" . $data['qty'][$i] . "',
+            '" . $data['unit_price'][$i] . "',
+            '" . $data['amount_price'][$i] . "' 
+            )";
+            $this->statement = $this->conn->prepare($this->sql);
+            if (!$this->statement->execute()) {  
+                return "Gagal memasukan items ke ".($i+1);
+            } 
+        } 
+        return true; 
+    } 
+
+    public function deleteInvoice($data)
+    {   
+        // begin transaction  
+        $this->sql = "DELETE from tbl_invoices where id='" . $data['id'] . "'";
+        $this->statement = $this->conn->prepare($this->sql);
+        $this->statement->execute(); 
+        return true; 
+    } 
+
 }

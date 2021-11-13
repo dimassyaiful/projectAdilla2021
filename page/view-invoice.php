@@ -1,9 +1,6 @@
-<?php
-
+<?php 
 include 'header.php';
-include '../class/Invoice.class.php';
-
-
+include '../class/Invoice.class.php'; 
 ?>
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -14,7 +11,11 @@ include '../class/Invoice.class.php';
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalAdd">Add Data Invoices</a></li>
+                    <li class="breadcrumb-item">
+                        <button href="#" class="btn btn-primary" onclick="openFormAdd();">
+                            Add Data Invoices
+                        </button>
+                    </li>
                      
                 </ol>
             </div>
@@ -53,14 +54,13 @@ include '../class/Invoice.class.php';
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered" style="width:100%">
+                            <table id="example" class="table  table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>Invoice Number</th>
                                         <th>Date</th>
-                                        <th>From/To</th>
-                                        <th>Type</th>
-                                        <th>Print</th>
+                                        <th>From/To</th> 
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbBody">  
@@ -75,90 +75,30 @@ include '../class/Invoice.class.php';
 </section>
 
 <!-- Modal Add-->
-<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modallAddLabel" aria-hidden="true">
+<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modallAddLabel" aria-hidden="true" data-backdrop="static"  >
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="modallAddLabel">Add Invoices</h5>
+                <h5 class="modal-title" id="modallAddLabel"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row" style="height: 27em; overflow: auto;">
-                    <div class="col-md-4">
-                        <div class="card shadow">
-                            <div class="card-header bg-primary">
-                                <div class="card-title">Data Invoice</div>
-                            </div>
-                            <div class="card-body">
-                                <form id="formx">
-                                <div class="form-group">
-                                    <label class="labelRequired" for="type">Type</label>
-                                    <select required name="type" id="type" class="form-control">
-                                        <option value="Import">Import</option>
-                                        <option value="Export">Export</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="labelRequired" for="fromto">From/To</label>
-                                    <input required  type="text" name="fromto" id="fromto" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="labelRequired" for="date">date</label>
-                                    <input required  type="date" name="date" id="date" class="form-control">
-                                </div>
-                                <center>
-                                    <button type="submit" class="btn btn-primary" > Add </button>
-                                    <!-- <a href="#" id="btnAddInvoice" class="btn btn-primary" onclick="AddInvoice()">Add</a> -->
-                                </center>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div id="dashAddInvoice">
-                            <!-- content will show here  -->
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div id="dashTableContent">
-                            <!-- content will show here  -->
-                        </div>
-                    </div>
-                </div>
+            <div id="divAdd" >
+                
             </div>
         </div>
     </div>
 </div>
 
 <!-- End modal Add  -->
-
-<!-- Modal Add-->
-<div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="modalDetailLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="modalDetailLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="dash">
-                    <!-- this content will show here  -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- End modal Detail  -->
+ 
 
 <?php include 'footer.php'?>
 
 
 <script>
+    var obj;
     var startDate = null;
     var endDate = null;
 
@@ -248,187 +188,41 @@ include '../class/Invoice.class.php';
     }
 </script>
 
-<script>
-    $(document).ready(function() {  
-        $("#formx").on('submit', function(e){
-            e.preventDefault();
-            AddInvoice();
-        });
-    });
+<script type="text/javascript">
+    async function openFormAdd(){
 
-    function detailData(id, type) {
-        $.ajax({
+        $("#modallAddLabel").html("Add Data Invoice");
+        $("#divAdd").html("<center> Prepare your form </center>");
+        $("#modalAdd").modal("show");
+        return await $.ajax({
             type: "POST",
             dataType: "html",
-            url: "../process/invoice.process.php",
-            data: {
-                id: id,
-                type: type,
-                detialInvoice: "detalInvoice"
-            },
-            success: function(response) {
-                $(".dash").html(response);
-                $("#modalDetailLabel").html(id);
-                $("#example3").DataTable();
-                $("#modalDetail").modal('show');
-            },
-            error: function(err) {
-                $(".dash").html(response);
-                $("#modalDetail").modal('show');
-            }
-        });
-    }
-
-    function AddInvoice() {
-        var type = $("#type").val();
-        var fromto = $("#fromto").val();
-        var date = $("#date").val();
-        $.ajax({
-            type: "POST",
-            dataType: "html",
-            url: "../process/invoice.process.php",
-            data: {
-                type: type,
-                fromto: fromto,
-                date: date,
-                posttype: "addInvoice"
-            },
-            success: function(response) {
-                $("#dashAddInvoice").html(response);
-                $("#type").prop("disabled", true);
-                $("#fromto").prop("disabled", true);
-                $("#date").prop("disabled", true);
-                // $("#btnAddInvoice").css("display", "none");
-            },
-            error: function(err) {
-                $("#dashAddInvoice").html(err);
-            }
-        });
-    }
-
-    function AddData() {
-        var typeInvoices = $("#typeInvoices").val();
-        if (typeInvoices == 'Import') {
-            var invoiceId = $("#invoiceId").val();
-            var typeInvoices = $("#typeInvoices").val();
-            var dateOfPib = $("#dateOfPib").val();
-            var docNo = $("#docNo").val();
-            var docType = $("#docType").val();
-            var noPengajuanDokumen = $("#noPengajuanDokumen").val();
-            var blNo = $("#blNo").val();
-            var vesselName = $("#vesselName").val();
-            var shipper = $("#shipper").val();
-            var remark = $("#remark").val();
-            var valuta = $("#valuta").val();
-            var valueInp = $("#value").val();
-            var valueIdr = $("#valueIdr").val();
-            var qty = $("#qty").val();
-            $.ajax({
-                type: "POST",
-                dataType: "html",
-                url: "../process/invoice.process.php",
-                data: {
-                    invoiceId: invoiceId,
-                    typeInvoices: typeInvoices,
-                    dateOfPib: dateOfPib,
-                    docNo: docNo,
-                    docType: docType,
-                    noPengajuanDokumen: noPengajuanDokumen,
-                    blNo: blNo,
-                    vesselName: vesselName,
-                    shipper: shipper,
-                    remark: remark,
-                    valuta: valuta,
-                    valueInp: valueInp,
-                    valueIdr: valueIdr,
-                    qty: qty,
-                    typeInsert: "Import"
-                },
-                success: function(response) {
-                    $("#dashTableContent").html(response);
-                    $("#example1").DataTable();
-                },
-                error: function(err) {
-                    $("#dashTableContent").html(err);
-                }
-            });
-        } else if (typeInvoices == 'Export') {
-            var invoiceId = $("#invoiceId").val();
-            var typeInvoices = $("#typeInvoices").val();
-            var dateOfPib = $("#dateOfPib").val();
-            var docNo = $("#docNo").val();
-            var docType = $("#docType").val();
-            var noPengajuanDokumen = $("#noPengajuanDokumen").val();
-            var blNo = $("#blNo").val();
-            var vesselName = $("#vesselName").val();
-            var consignee = $("#consignee").val();
-            var remark = $("#remark").val();
-            var valuta = $("#valuta").val();
-            var valueInp = $("#value").val();
-            var valueIdr = $("#valueIdr").val();
-            var qty = $("#qty").val();
-            $.ajax({
-                type: "POST",
-                dataType: "html",
-                url: "../process/invoice.process.php",
-                data: {
-                    invoiceId: invoiceId,
-                    typeInvoices: typeInvoices,
-                    dateOfPib: dateOfPib,
-                    docNo: docNo,
-                    docType: docType,
-                    noPengajuanDokumen: noPengajuanDokumen,
-                    blNo: blNo,
-                    vesselName: vesselName,
-                    consignee: consignee,
-                    remark: remark,
-                    valuta: valuta,
-                    valueInp: valueInp,
-                    valueIdr: valueIdr,
-                    qty: qty,
-                    typeInsert: "Export"
-                },
-                success: function(response) {
-                    $("#dashTableContent").html(response);
-                    $("#example1").DataTable();
-                },
-                error: function(err) {
-                    $("#dashTableContent").html(err);
-                }
-            });
-        }
-    }
-
-
-    $(document).ready(function() {
-        //Refresh Temporary table
-        $.ajax({
-                type: "POST",
-                dataType: "html",
-                url: "../process/export.process.php",
-                data: {
-                    type: 'refreshTempExport',
-                },
-                error: function(err) {
-                    console.log(err)
-                }
-            });
-
-            //clear temporary table when refresh page
-        $.ajax({
-            type: "POST",
-            dataType: "html",
-            url: "../process/import.process.php",
-            data: {
-                type: 'refreshTempImport',
+            url: "../ajax/form-add-invoices.php", 
+            success: function(data){
+                $("#divAdd").html(data); 
             },
             error: function(err) {
                 console.log(err)
             }
         });
-    });
+    }
 
-    $('#modalAdd').on('hidden.bs.modal', function(e) {
-        window.location = "view-invoice.php";
-    });
+    async function openFormDetail(id){
+        $("#modallAddLabel").html("Detail Data Invoice | "+id);
+        $("#divAdd").html("<center> Mengambil Data </center>");
+        $("#modalAdd").modal("show");
+        return await $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "../ajax/form-edit-invoices.php", 
+            data:"id="+id,
+            success: function(data){
+                $("#divAdd").html(data); 
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    }
 </script>
+   

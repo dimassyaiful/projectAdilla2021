@@ -487,7 +487,7 @@ $dataKurs = $kurs->getData();
                 },
                 {
                     extend: 'pdfHtml5',
-                    orientation: 'landscape',
+                    orientation: 'landscape', 
                     pageSize: 'legal',
                     title: function () { return `Data Import \n Tanggal ${a} - ${b}`; },
                     exportOptions: {

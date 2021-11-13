@@ -124,10 +124,7 @@ function dropdownKursSelected($val1,$val2,$value,$valueIdr){
     var valuta_ = "<?= $data->valuta; ?>";
     function setValue_(kursArray){
 
-        selectedKurs = kursArray.split("|||"); 
-        console.log(selectedKurs); 
-        // arr 0 -> kurs
-        // arr 1 -> kurstmp
+        selectedKurs = kursArray.split("|||");  
         valuta_ = selectedKurs[2];
         $("#kurs_").val(selectedKurs[0]);
         $("#kurs_tmp_").val(selectedKurs[1]);
