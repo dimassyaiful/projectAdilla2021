@@ -155,8 +155,8 @@ $dataKurs = $kurs->getData();
                             <input type="text" name="shipper" id="shipper" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label class="labelRequired" for="remark">Remark</label>
-                            <input type="text" name="remark" id="remark" class="form-control" required>
+                            <label class="" for="remark">Remark</label>
+                            <input type="text" name="remark" id="remark" class="form-control" >
                         </div>
 
                         <div class="form-group">

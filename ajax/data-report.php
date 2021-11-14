@@ -8,7 +8,8 @@ foreach ($datas as $data):
     $total = $total + $data->valueIdr;
     ?>
         <tr>
-            <td><?=$data->idInvoices;?></td>
+            <td><?=$data->id;?></td>
+            <td><?=ucfirst($data->type);?></td>
             <td><?=$data->dateOfPib;?></td>
             <td><?=$data->docNo;?></td>
             <td><?=$data->docType;?></td>
@@ -16,12 +17,11 @@ foreach ($datas as $data):
             <td><?=$data->blNo;?></td>
             <td><?=$data->vesselName;?></td>
             <td><?=$data->shipper;?></td>
-            <td><?=$data->remark;?></td>
-            <td><?=number_format($data->qty,0,",",".");?></td>
+            <td><?=$data->remark;?></td> 
             <td><?=$data->valuta;?></td>
+            <td><?=number_format($data->kurs, 2,",",".");?> </td>
             <td><?=number_format($data->value, 2,",",".");?> </td>
             <td>Rp. <?=number_format($data->valueIdr, 2,",",".");?></td>
-            <td><?=ucfirst($data->type);?></td>
         </tr>
 	 <?php endforeach; ?>
             

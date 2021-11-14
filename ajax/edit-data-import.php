@@ -74,8 +74,8 @@ function dropdownKursSelected($val1,$val2,$value,$valueIdr){
                 <input type="text" name="shipper" value="<?=$data->shipper;?>" class="form-control" required>
             </div>
             <div class="form-group">
-                <label class="labelRequired" for="remark">Remark</label>
-                <input type="text" name="remark" value="<?=$data->remark;?>" class="form-control" required>
+                <label class="" for="remark">Remark</label>
+                <input type="text" name="remark" value="<?=$data->remark;?>" class="form-control">
             </div> 
              <div class="form-group">
                             <label class="labelRequired" for="valuta">Valuta</label>  

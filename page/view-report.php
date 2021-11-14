@@ -58,7 +58,8 @@ include '../class/Report.class.php';
                             <table id="example" class="table table-striped table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Invoice Number</th>
+                                        <th>ID</th>
+                                        <th>Type</th>
                                         <th>Date of Pib</th>
                                         <th>Doc No.</th>
                                         <th>Doc Type</th>
@@ -66,19 +67,18 @@ include '../class/Report.class.php';
                                         <th>BL No.</th>
                                         <th>Vessel Name</th>
                                         <th>Shipper / Consignee</th>
-                                        <th>remark</th>
-                                        <th>Qty</th>
+                                        <th>remark</th> 
                                         <th>Valuta</th>
+                                        <th>Kurs</th>
                                         <th>Value</th>
                                         <th>Value in IDR</th>
-                                        <th>Type</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbBody"> 
                                 </tbody>
                                 <tfoot style="display: none;">
                                 <tr>
-                                    <th colspan=11> </th>  
+                                    <th colspan=12> </th>  
                                     <th align="right"> Total: </th> 
                                     <th class="totalValue"> </th>  
                                 </tr>
@@ -203,7 +203,7 @@ include '../class/Report.class.php';
                     extend: 'excel',
                     title: function () { return `Report Import & Export Tanggal ${a} - ${b}`; },
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13 ]
+                        columns: [ 0, 1, 2, 3,4,5,6,7,8,9,10,11,12,13  ]
                     }, footer: true
                 },
                 {

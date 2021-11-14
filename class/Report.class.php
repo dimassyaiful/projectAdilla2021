@@ -18,7 +18,7 @@ class Report
     public function getData($startDate, $endDate)
     {
         try {
-            $this->sql = "SELECT * FROM tbl_invoices as i JOIN (SELECT * FROM tbl_import  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate' UNION SELECT * FROM tbl_export  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate' ) as ie ON i.id = ie.idInvoices";
+            $this->sql = "SELECT *, 'Import' as type FROM tbl_import  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate' UNION SELECT *, 'Export' as type FROM tbl_export  where dateOfPib >= '$startDate' and dateOfPib <= '$endDate'";
             $this->statement = $this->conn->prepare($this->sql);
             if (!$this->statement->execute()) return false;
             $results = array();
